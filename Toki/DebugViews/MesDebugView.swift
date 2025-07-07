@@ -19,7 +19,3 @@ struct MesDebugView: View {
     }
 }
 
-#Preview {
-    MesDebugView()
-        .modelContainer(for: Message.self, inMemory: true)
-}
