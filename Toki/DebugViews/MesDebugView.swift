@@ -1,6 +1,6 @@
 //
-//  ContentView.swift
-//  toki
+//  MesDebugView.swift
+//  Toki
 //
 //  Created by POS on 7/7/25.
 //
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
+struct MesDebugView: View {
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -19,7 +19,3 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Message.self, inMemory: true)
-}
