@@ -64,7 +64,6 @@ struct MessageListView: View {
                 }
             }
         }
-        .navigationTitle("알림 문구 목록")
     }
 
     /// 문구 삭제

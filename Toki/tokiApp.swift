@@ -26,6 +26,10 @@ struct tokiApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                                    requestNotice()
+                                }
+
         }
         .modelContainer(sharedModelContainer)
     }
