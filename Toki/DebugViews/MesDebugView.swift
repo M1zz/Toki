@@ -14,7 +14,7 @@ struct MesDebugView: View {
     var body: some View {
         MessageListView()
             .task {
-                await Message.insertPreSet(context: modelContext)
+                await Message.insertPreset(context: modelContext)
             }
     }
 }
