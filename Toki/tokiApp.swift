@@ -12,7 +12,7 @@ import SwiftData
 struct tokiApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Message.self,
+            Item.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
