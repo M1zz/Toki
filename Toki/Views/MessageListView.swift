@@ -26,8 +26,8 @@ struct MessageListView: View {
                         Button {
                             selectedID = message.id
                         } label: {
-                            Image(systemName: selectedID == message.id? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(.accentColor)
+                            Image(systemName: selectedID == message.id ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(.accentColor)
                         }
                         .buttonStyle(.plain)
                     }
@@ -46,15 +46,9 @@ struct MessageListView: View {
                     .padding(.vertical, 8)
                 }
                 .buttonStyle(.plain)
-                .contentShape(Rectangle())
-
-                NavigationLink(
-                    destination: AddMessageView(),
-                    isActive: $showAddMessageView
-                ) {
-                    EmptyView()
+                .navigationDestination(isPresented: $showAddMessageView) {
+                    AddMessageView()
                 }
-                .hidden()
 
             }
             /// 가장 위에 있는 메세지가 기본값
@@ -64,7 +58,6 @@ struct MessageListView: View {
                 }
             }
         }
-        .navigationTitle("알림 문구 목록")
     }
 
     /// 문구 삭제

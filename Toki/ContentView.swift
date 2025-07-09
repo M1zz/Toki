@@ -12,10 +12,13 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
-        MessageListView()
-            .task {
-                await Message.insertPreset(context: modelContext)
-            }
+        Text("Hello Toki!")
+//        MessageListView()
+//            .task {
+//                await Message.insertPreset(context: modelContext)
+//            }
+//        RingDebugView()
+        
     }
 }
 
