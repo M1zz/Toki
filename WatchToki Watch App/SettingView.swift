@@ -7,47 +7,99 @@
 
 import SwiftUI
 
-struct SettingView: View {
-    // 시, 분, 초 저장할 변수
-    @State private var selectedHour = 0
-    @State private var selectedMinute = 0
-    @State private var selectedSecond = 0
+enum NavigationTarget: Hashable {
+    case setNotiView
+    case timerView(mainDuration: Int, NotificationDuration: Int)
+}
+
+struct SettingView: View {    
+    @StateObject private var settingViewModel = SettingViewModel()
+    
+    @State private var path: [NavigationTarget] = []
+//    @State private var path = NavigationPath()
+    
+    var totalTime: Int {
+        settingViewModel.time.convertedSecond
+    }
+    
+//    init(settingViewModel: SettingViewModel) {
+//        self.settingViewModel = settingViewModel
+//    }
     
     var body: some View {
-        VStack(spacing: 10) {
-            Text("타이머 시간 설정하기")
-            
-            HStack {
-                Picker(selection: $selectedHour, label: Text("시")) {
-                    // 24까지 할지는 더 고민해보기
-                    ForEach(0..<24) { Text(String(format: "%02d", $0)) }
-                }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
+        NavigationStack(path: $path) {
+            VStack(spacing: 10) {
+                Text("타이머 시간 설정하기")
                 
-                Picker(selection: $selectedMinute, label: Text("분")) {
-                    ForEach(0..<60) { Text(String(format: "%02d", $0)) }
+                HStack {
+                    Picker(selection: $settingViewModel.time.hour, label: Text("시")) {
+                        ForEach(0..<24) { hour in
+                            Text("\(hour)")
+                        }
+                    }
+                    .frame(width: 50)
+                    .clipped()
+                    .focusable()
+                    
+                    Picker(selection: $settingViewModel.time.minute, label: Text("분")) {
+                        ForEach(0..<60) { minute in
+                            Text("\(minute)")
+                        }
+                    }
+                    .frame(width: 50)
+                    .clipped()
+                    .focusable()
+                    
+                    Picker(selection: $settingViewModel.time.second, label: Text("초")) {
+                        ForEach(0..<60) { second in
+                            Text("\(second)")
+                        }
+                    }
+                    .frame(width: 50)
+                    .clipped()
+                    .focusable()
                 }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
+                .frame(height: 100)
                 
-                Picker(selection: $selectedSecond, label: Text("초")) {
-                    ForEach(0..<60) { Text(String(format: "%02d", $0)) }
+                NavigationLink(value: NavigationTarget.setNotiView) {
+                    Text("다음")
                 }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
+                
+//                NavigationLink("다음", value: "SetNotiView")
+                
+//                NavigationLink(
+//                    destination: SetNotiView(viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime))
+//                ) {
+//                    Text("다음")
+//                }
             }
-            .frame(height: 100)
+            .navigationDestination(for: NavigationTarget.self) { target in
+                switch target {
+                case .setNotiView:
+                    SetNotiView(viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime),
+                                path: $path
+                    )
+                case .timerView(let mainDuration, let notificationDuration):
+                    TimerView(timerViewModel: TimerViewModel(
+                        mainDuration: mainDuration, notificationDuration: notificationDuration
+                    ), path: $path)
+                    
+                }
+            }
             
-            Button("다음") {
-                // 여기서 액션 넣어주기
-            }
+            
+//            .navigationDestination(for: String.self) { value in
+//                if value == "SetNotiView" {
+//                    SetNotiView(viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime),
+//                                path: $path
+//                    )
+//                }
+//            }
+            
         }
     }
 }
+
 
 
 #Preview {
@@ -62,5 +114,7 @@ struct SettingView: View {
 // 시, 분, 초? 각각 독립적으로 돌아가고
 // 시작 눌렀을 때 각 피커 값들 다음 화면으로 전달
 
-// 워치 크기별 반응형 UI로 수정해야함
-// 몇분 전 울릴지.. 설정..
+
+
+// 워치 크기별 반응형 UI로 수정해야함 - 다음에
+
