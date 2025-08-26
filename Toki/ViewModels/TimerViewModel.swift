@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 final class TimerViewModel: ObservableObject {
-    @Published private(set) var state: TimerRunState = .idle
+    @Published private(set) var state: TimerState = .idle
     @Published private(set) var remaining: TimeInterval = 0
 
     let engine = TimerEngine()

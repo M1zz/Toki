@@ -40,7 +40,7 @@ struct ContentView: View {
                     onResume: { vm.resume() },
                     onCancel: {
                         vm.stop()
-                        justConfigure()
+                        justConfigure(save: false, toast: false)
                     }
                 )
 
@@ -56,8 +56,9 @@ struct ContentView: View {
                             step: 1
                         )
                         Spacer()
-                        Button("적용") { justConfigure() }
+                        Button("적용") { justConfigure(save: true, toast: true) }
                             .buttonStyle(.bordered)
+
                     }
 
                     // prealert setting area
@@ -91,8 +92,6 @@ struct ContentView: View {
                             }
                         }
                     }
-                    Button("설정값 저장하기") { saveTemplate() }
-                        .buttonStyle(.bordered)
                 }
             }
             .padding()
@@ -116,43 +115,49 @@ struct ContentView: View {
         .toast(toast)
         .onAppear {
             vm.showToast = { toast.show(Toast($0)) }
-            justConfigure()
+            justConfigure(save: false, toast: false)
         }
 
     }
 
-    private func justConfigure() {
+    private func justConfigure(save: Bool = true, toast: Bool = true) {
         let mainSec = mainMinutes * 60
         let offsets = selectedOffsets.filter { $0 > 0 && $0 < mainSec }
+        let normalized = Array(Set(offsets)).sorted()
         let temp = Timer(
             name: "dummy time setting",
             mainSeconds: mainSec,
-            prealertOffsetsSec: Array(offsets)
+            prealertOffsetsSec: normalized
         )
         vm.configure(from: temp)
         configuredMainSeconds = mainSec
-        toast.show(
-            Toast(
-                "타이머 적용: \(mainMinutes)분 / 예비 \(offsets.map { "\($0/60)분" }.sorted().joined(separator: ", "))"
+
+        if save {
+            let preText = normalized.map { "\($0/60)분" }.joined(separator: "·")
+            let name =
+                normalized.isEmpty
+                ? "메인 \(mainSec/60)분"
+                : "메인 \(mainSec/60)분 / 예비 \(preText)"
+            let entry = Timer(
+                name: name,
+                mainSeconds: mainSec,
+                prealertOffsetsSec: normalized
             )
-        )
+            context.insert(entry)
+            try? context.save()
+        }
+
+        if toast {
+            self.toast.show(
+                Toast(
+                    "타이머 적용: \(mainMinutes)분 / 예비 \(offsets.map { "\($0/60)분" }.sorted().joined(separator: ", "))"
+                )
+            )
+        }
     }
 
     private func start() {
         vm.start()
-    }
-
-    private func saveTemplate() {
-        let mainSec = mainMinutes * 60
-        let offsets = selectedOffsets.filter { $0 > 0 && $0 < mainSec }
-        let t = Timer(
-            name: "메인 \(mainMinutes)분",
-            mainSeconds: mainSec,
-            prealertOffsetsSec: Array(offsets)
-        )
-        context.insert(t)
-        try? context.save()
-        toast.show(Toast("템플릿 저장됨", type: .success))
     }
 
     private func apply(template t: Timer) {
