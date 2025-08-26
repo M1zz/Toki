@@ -20,12 +20,23 @@ struct ContentView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 // remaining time
-                VStack(spacing: 8) {
-                    Text(screenVM.timeString(from: screenVM.timerVM.remaining))
+                ZStack {
+                    Clock(
+                        remaining: screenVM.remaining,
+                        total: TimeInterval(screenVM.configuredMainSeconds),
+                    )
+
+                    VStack(spacing: 8) {
+                        Text(
+                            screenVM.timeString(
+                                from: screenVM.timerVM.remaining
+                            )
+                        )
                         .font(
                             .system(size: 44, weight: .bold, design: .rounded)
                         )
                         .monospacedDigit()
+                    }
                 }
 
                 TimerButton(
@@ -50,7 +61,7 @@ struct ContentView: View {
                         Spacer()
                         Button("적용") { screenVM.applyCurrentSettings() }
                             .buttonStyle(.bordered)
-                        
+
                     }
 
                     // prealert setting area
