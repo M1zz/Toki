@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct TimerButton: View {
-    let state: TimerRunState
+    let state: TimerState
     let onStart: () -> Void
     let onPause: () -> Void
     let onResume: () -> Void

@@ -131,6 +131,22 @@ struct ContentView: View {
         )
         vm.configure(from: temp)
         configuredMainSeconds = mainSec
+
+        let normalized = Array(Set(offsets)).sorted()
+        let preText = normalized.map { "\($0/60)분" }.joined(separator: "·")
+        let name =
+            normalized.isEmpty
+            ? "메인 \(mainSec/60)분"
+            : "메인 \(mainSec/60)분 / 예비 \(preText)"
+
+        let entry = Timer(
+            name: name,
+            mainSeconds: mainSec,
+            prealertOffsetsSec: normalized
+        )
+        context.insert(entry)
+        try? context.save()
+
         toast.show(
             Toast(
                 "타이머 적용: \(mainMinutes)분 / 예비 \(offsets.map { "\($0/60)분" }.sorted().joined(separator: ", "))"
