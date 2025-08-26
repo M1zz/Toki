@@ -10,23 +10,18 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
-    private var templates: [Timer]
 
-    @StateObject private var vm = TimerViewModel()
+    @StateObject private var screenVM = TimerScreenViewModel()
     @StateObject private var toast = ToastManager()
 
-    @State private var mainMinutes: Int = 10
-    @State private var selectedOffsets: Set<Int> = [60, 180, 300]  // prealert settings
-    @State private var configuredMainSeconds: Int = 600
-    @State private var showTemplateSheet = false
+    @State private var showHistory = false
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
                 // remaining time
                 VStack(spacing: 8) {
-                    Text(timeString(from: vm.remaining))
+                    Text(screenVM.timeString(from: screenVM.timerVM.remaining))
                         .font(
                             .system(size: 44, weight: .bold, design: .rounded)
                         )
@@ -34,14 +29,11 @@ struct ContentView: View {
                 }
 
                 TimerButton(
-                    state: vm.state,
-                    onStart: { start() },
-                    onPause: { vm.pause() },
-                    onResume: { vm.resume() },
-                    onCancel: {
-                        vm.stop()
-                        justConfigure(save: false, toast: false)
-                    }
+                    state: screenVM.timerVM.state,
+                    onStart: { screenVM.start() },
+                    onPause: { screenVM.pause() },
+                    onResume: { screenVM.resume() },
+                    onCancel: { screenVM.cancel() }
                 )
 
                 Divider()
@@ -50,19 +42,19 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Stepper(
-                            "메인 알림 \(mainMinutes)분",
-                            value: $mainMinutes,
+                            "메인 알림 \(screenVM.mainMinutes)분",
+                            value: $screenVM.mainMinutes,
                             in: 1...120,
                             step: 1
                         )
                         Spacer()
-                        Button("적용") { justConfigure(save: true, toast: true) }
+                        Button("적용") { screenVM.applyCurrentSettings() }
                             .buttonStyle(.bordered)
-
+                        
                     }
 
                     // prealert setting area
-                    let mainSeconds = mainMinutes * 60
+                    let mainSeconds = screenVM.mainMinutes * 60
                     let presets = Timer.presetOffsetsSec
                     VStack(alignment: .leading, spacing: 8) {
                         Text("예비 알림").font(.subheadline).foregroundStyle(
@@ -75,13 +67,19 @@ struct ContentView: View {
                                     "\(sec/60)분",
                                     isOn: Binding(
                                         get: {
-                                            selectedOffsets.contains(sec)
+                                            screenVM.selectedOffsets.contains(
+                                                sec
+                                            )
                                         },
                                         set: { on in
                                             if on {
-                                                selectedOffsets.insert(sec)
+                                                screenVM.selectedOffsets.insert(
+                                                    sec
+                                                )
                                             } else {
-                                                selectedOffsets.remove(sec)
+                                                screenVM.selectedOffsets.remove(
+                                                    sec
+                                                )
                                             }
                                         }
                                     )
@@ -98,78 +96,25 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        showTemplateSheet = true
+                        showHistory = true
                     } label: {
                         Image(systemName: "list.bullet")
                     }
                 }
             }
         }
-        .sheet(isPresented: $showTemplateSheet) {
+        .sheet(isPresented: $showHistory) {
             TimerTemplateView { selected in
-                apply(template: selected)
+                screenVM.apply(template: selected)
             }
             .presentationDetents(Set<PresentationDetent>([.medium, .large]))
             .presentationDragIndicator(Visibility.visible)
         }
         .toast(toast)
         .onAppear {
-            vm.showToast = { toast.show(Toast($0)) }
-            justConfigure(save: false, toast: false)
+            screenVM.attachContext(context)
+            screenVM.timerVM.showToast = { toast.show(Toast($0)) }
+            screenVM.initialConfiguration()
         }
-
-    }
-
-    private func justConfigure(save: Bool = true, toast: Bool = true) {
-        let mainSec = mainMinutes * 60
-        let offsets = selectedOffsets.filter { $0 > 0 && $0 < mainSec }
-        let normalized = Array(Set(offsets)).sorted()
-        let temp = Timer(
-            name: "dummy time setting",
-            mainSeconds: mainSec,
-            prealertOffsetsSec: normalized
-        )
-        vm.configure(from: temp)
-        configuredMainSeconds = mainSec
-
-        if save {
-            let preText = normalized.map { "\($0/60)분" }.joined(separator: "·")
-            let name =
-                normalized.isEmpty
-                ? "메인 \(mainSec/60)분"
-                : "메인 \(mainSec/60)분 / 예비 \(preText)"
-            let entry = Timer(
-                name: name,
-                mainSeconds: mainSec,
-                prealertOffsetsSec: normalized
-            )
-            context.insert(entry)
-            try? context.save()
-        }
-
-        if toast {
-            self.toast.show(
-                Toast(
-                    "타이머 적용: \(mainMinutes)분 / 예비 \(offsets.map { "\($0/60)분" }.sorted().joined(separator: ", "))"
-                )
-            )
-        }
-    }
-
-    private func start() {
-        vm.start()
-    }
-
-    private func apply(template t: Timer) {
-        vm.configure(from: t)
-        configuredMainSeconds = t.mainSeconds
-        vm.start()
-    }
-
-    private func timeString(from interval: TimeInterval) -> String {
-        let total = max(0, Int(interval.rounded()))
-        let m = total / 60
-        let s = total % 60
-        return String(format: "%02d:%02d", m, s)
     }
 }
