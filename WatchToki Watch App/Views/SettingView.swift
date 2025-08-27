@@ -29,7 +29,8 @@ struct SettingView: View {
     var body: some View {
         NavigationStack(path: $path) {
             VStack(spacing: 10) {
-                Text("타이머 시간 설정하기")
+                
+                Text("타이머 시간 설정")
                 
                 HStack {
                     Picker(selection: $settingViewModel.time.hour, label: Text("시")) {

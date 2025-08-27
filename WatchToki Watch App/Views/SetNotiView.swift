@@ -16,7 +16,8 @@ struct SetNotiView: View {
     var body: some View {
         //        NavigationStack {
         VStack(spacing: 10) {
-            Text("완료 전 알림 설정하기")
+            Text("완료 전 알림 설정")
+
             
             let maxHour = viewModel.maxSelectableTimeModel.hour
             let maxMinute = viewModel.maxSelectableTimeModel.minute

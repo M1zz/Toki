@@ -8,28 +8,30 @@
 import SwiftUI
 
 public struct TimerView: View {
-    @ObservedObject var timerViewModel: TimerViewModel
+    @StateObject private var timerViewModel: TimerViewModel
+//    @ObservedObject var timerViewModel: TimerViewModel
     
     @Binding var path: [NavigationTarget]
     
 //    @Binding var path: NavigationPath
     
-//    init(timerViewModel: TimerViewModel, path: Binding<NavigationPath>) {
-//        self._timerViewModel = StateObject(wrappedValue: timerViewModel)
-//        self._path = path
-//    }
+    init(timerViewModel: TimerViewModel, path: Binding<[NavigationTarget]>) {
+        self._timerViewModel = StateObject(wrappedValue: timerViewModel)
+        self._path = path
+    }
     
     public var body: some View {
         VStack {
             Text("\(timerViewModel.timeRemaining.formattedTimeString)")
             
             HStack {
-                Button("Cancel") {
+                Button("취소") {
                     // 루트뷰로 가야함
                     path = []
                 }
                 
-                Button("Pause") {
+                Button(timerViewModel.isPaused ? "재생" : "일시정지") {
+                    timerViewModel.togglePause()
                 }
             }
         }
