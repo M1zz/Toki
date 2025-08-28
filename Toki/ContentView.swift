@@ -5,19 +5,17 @@
 //  Created by POS on 7/7/25.
 //
 
-import SwiftUI
 import SwiftData
 import SwiftUI
 import UserNotifications
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Environment(\.modelContext) private var context
 
     var body: some View {
-        TimerView()
+        TimerUnifiedView()
             .onAppear {
-                // 알림 권한 요청
+                // 소리/진동 알림 권한 요청
                 UNUserNotificationCenter.current().requestAuthorization(
                     options: [.alert, .sound, .badge]) { granted, error in
                         if let error = error {
@@ -26,24 +24,4 @@ struct ContentView: View {
                     }
             }
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

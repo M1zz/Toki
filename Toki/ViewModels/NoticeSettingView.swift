@@ -1,5 +1,5 @@
 //
-//  RingDebugView.swift
+//  NoticeSettingView.swift
 //  Toki
 //
 //  Created by POS on 7/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RingDebugView: View {
+struct NoticeSettingView: View {
     @AppStorage("ringMode") private var ringMode: RingMode = .sound
     @AppStorage("pushEnabled") private var pushEnabled: Bool = true
 
@@ -35,5 +35,5 @@ struct RingDebugView: View {
 }
 
 #Preview {
-    RingDebugView()
+    NoticeSettingView()
 }
