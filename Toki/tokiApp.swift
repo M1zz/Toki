@@ -12,6 +12,7 @@ struct tokiApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
         }
         .modelContainer(for: [Timer.self, TimerRecord.self])
     }
