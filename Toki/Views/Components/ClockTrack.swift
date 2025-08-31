@@ -8,35 +8,38 @@
 import Foundation
 import SwiftUI
 
-struct ClockTrack: Shape {
+struct ClockTrack: InsettableShape {
     var remaining: CGFloat
+    var insetAmount: CGFloat = 0
 
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        let clamped = min(max(remaining, 0), 1)
-        guard clamped > 0 else { return path }
+        let p = max(0, min(1, remaining))
+        guard p > 0 else { return path }
 
-        let size = min(rect.width, rect.height)
-        let radius = size / 2
+        let size   = min(rect.width, rect.height)
+        let radius = size / 2 - insetAmount
         let center = CGPoint(x: rect.midX, y: rect.midY)
 
         let start = Angle.degrees(-90)
-        let end = Angle.degrees(-90 - Double(clamped * 360))
+        let end   = Angle.degrees(start.degrees + Double(p * 360))
 
-        path.move(to: center)
-        path.addArc(
-            center: center,
-            radius: radius,
-            startAngle: start,
-            endAngle: end,
-            clockwise: true
-        )
-        path.closeSubpath()
+        path.addArc(center: center,
+                    radius: radius,
+                    startAngle: start,
+                    endAngle: end,
+                    clockwise: false)
         return path
     }
 
     var animatableData: CGFloat {
         get { remaining }
         set { remaining = newValue }
+    }
+
+    func inset(by amount: CGFloat) -> some InsettableShape {
+        var s = self
+        s.insetAmount += amount
+        return s
     }
 }
