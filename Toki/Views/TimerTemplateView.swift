@@ -36,11 +36,24 @@ struct TimerTemplateView: View {
                                 onSelect(t)
                                 dismiss()
                             } label: {
-                                let pre = t.prealertOffsetsSec
+                                let mMain = t.mainSeconds / 60
+                                let sMain = t.mainSeconds % 60
+
+                                let preList = t.prealertOffsetsSec
                                     .sorted()
-                                    .map { "\($0/60)분" }
+                                    .map { sec -> String in
+                                        let m = sec / 60
+                                        return "\(m)분"
+                                    }
                                     .joined(separator: ", ")
-                                Text("메인 \(t.mainSeconds/60)분, 예비: \(pre)")
+
+                                if preList.isEmpty {
+                                    Text("메인 \(mMain)분 \(sMain)초, 예비: 없음")
+                                } else {
+                                    Text(
+                                        "메인 \(mMain)분 \(sMain)초, 예비: \(preList)"
+                                    )
+                                }
                             }
                             .swipeActions(
                                 edge: .trailing,
