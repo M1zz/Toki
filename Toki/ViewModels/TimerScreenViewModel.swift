@@ -13,6 +13,7 @@ import SwiftUI
 @MainActor
 final class TimerScreenViewModel: ObservableObject {
     @Published var mainMinutes: Int = 10
+    @Published var mainSeconds: Int = 0
     @Published var selectedOffsets: Set<Int> = [60, 180, 300]  // prealert settings
     @Published private(set) var configuredMainSeconds: Int = 600
 
@@ -58,6 +59,8 @@ final class TimerScreenViewModel: ObservableObject {
     func apply(template t: Timer) {
         timerVM.configure(from: t)
         configuredMainSeconds = t.mainSeconds
+        mainMinutes = max(0, t.mainSeconds) / 60
+        mainSeconds = max(0, t.mainSeconds) % 60
         timerVM.start()
     }
 
@@ -73,7 +76,10 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     func justConfigure(save: Bool, toast: Bool) {
-        let mainSec = mainMinutes * 60
+        // ★ 총초 = 분*60 + 초(0~59 보정)
+        let secPart = max(0, min(59, mainSeconds))
+        let mainSec = max(0, mainMinutes) * 60 + secPart
+
         let normalizedOffsets: [Int] = Array(
             selectedOffsets
                 .filter { $0 > 0 && $0 < mainSec }
@@ -102,19 +108,23 @@ final class TimerScreenViewModel: ObservableObject {
         }
 
         if toast {
+            let mainLabel = secPart > 0 ? "\(mainMinutes)분 \(secPart)초" : "\(mainMinutes)분"
+            let preText = normalizedOffsets
+                .map { "\($0/60)분" }
+                .sorted()
+                .joined(separator: ", ")
             timerVM.showToast?(
-                "타이머 적용: \(mainMinutes)분"
-                    + (normalizedOffsets.isEmpty
-                        ? ""
-                        : " / 예비 \(normalizedOffsets.map { "\($0/60)분" }.sorted().joined(separator: ", "))")
+                "타이머 적용: \(mainLabel)" + (preText.isEmpty ? "" : " / 예비 \(preText)")
             )
         }
     }
 
     private func makeTemplateName(mainSec: Int, offsets: [Int]) -> String {
-        let m = max(1, mainSec) / 60
-        if offsets.isEmpty { return "메인 \(m)분" }
+        let m = max(0, mainSec) / 60
+        let s = max(0, mainSec) % 60
+        let base = s > 0 ? "메인 \(m)분 \(s)초" : "메인 \(m)분"
+        if offsets.isEmpty { return base }
         let pre = offsets.map { "\($0/60)" }.joined(separator: "·")
-        return "메인 \(m)분 / 예비 \(pre)분"
+        return "\(base) / 예비 \(pre)분"
     }
 }
