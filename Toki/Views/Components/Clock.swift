@@ -11,6 +11,7 @@ import SwiftUI
 struct Clock: View {
     var remaining: TimeInterval
     var total: TimeInterval
+    var markers: [CGFloat] = []
     var size: CGFloat = 240
 
     private var ratio: CGFloat {
@@ -21,10 +22,18 @@ struct Clock: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.secondary.opacity(0.15))
+                .fill(Color.secondary)
 
             ClockTrack(remaining: ratio)
                 .fill(Color.accentColor)
+
+            ClockMarkers(
+                remaining: ratio,
+                markers: markers,
+                dotSize: 12,
+                inset: 3,
+                upcoming: true
+            )
         }
         .frame(width: size, height: size)
         .animation(.easeInOut(duration: 0.15), value: ratio)

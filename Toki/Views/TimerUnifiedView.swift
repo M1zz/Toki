@@ -20,11 +20,22 @@ struct TimerUnifiedView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                let totalSec = screenVM.configuredMainSeconds
+                let markerRatios: [CGFloat] = screenVM.selectedOffsets
+                    .filter { $0 > 0 && $0 < totalSec }
+                    .compactMap { sec -> CGFloat? in
+                        guard totalSec > 0 else { return nil }
+                        let r = CGFloat(sec) / CGFloat(totalSec)
+                        return max(0, min(1, r))
+                    }
+                    .sorted(by: >)
+            
                 // remaining time
                 ZStack {
                     Clock(
                         remaining: screenVM.remaining,
                         total: TimeInterval(screenVM.configuredMainSeconds),
+                        markers: markerRatios  // ★ 추가
                     )
 
                     VStack(spacing: 8) {
@@ -116,12 +127,12 @@ struct TimerUnifiedView: View {
                 }
                 // notice setting
                 ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink {
-                            NoticeSettingView()
-                        } label: {
-                            Image(systemName: "gearshape")
-                        }
+                    NavigationLink {
+                        NoticeSettingView()
+                    } label: {
+                        Image(systemName: "gearshape")
                     }
+                }
             }
         }
         .sheet(isPresented: $showHistory) {
