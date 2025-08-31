@@ -29,13 +29,13 @@ struct TimerUnifiedView: View {
                         return max(0, min(1, r))
                     }
                     .sorted(by: >)
-                
+            
                 // remaining time
                 ZStack {
                     Clock(
                         remaining: screenVM.remaining,
                         total: TimeInterval(screenVM.configuredMainSeconds),
-                        markers: markerRatios
+                        markers: markerRatios  // ★ 추가
                     )
 
                     VStack(spacing: 8) {

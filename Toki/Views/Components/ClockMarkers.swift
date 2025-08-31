@@ -25,7 +25,7 @@ struct ClockMarkers: View {
             ZStack {
                 ForEach(Array(markers.enumerated()), id: \.offset) { _, m in
                     let t = max(0, min(1, m))
-                    let theta = (-90.0 + Double(t * 360.0)) * .pi / 180.0
+                    let theta = (-90.0 - Double(t * 360.0)) * .pi / 180.0
                     let rr = r - inset
                     let x = cx + CGFloat(cos(theta)) * rr
                     let y = cy + CGFloat(sin(theta)) * rr

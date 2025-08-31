@@ -22,23 +22,16 @@ struct Clock: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.secondary.opacity(0.25), lineWidth: 12)
+                .fill(Color.secondary)
 
             ClockTrack(remaining: ratio)
-                .stroke(
-                    Color.accentColor,
-                    style: StrokeStyle(
-                        lineWidth: 12,
-                        lineCap: .round,
-                        lineJoin: .round
-                    )
-                )
-            
+                .fill(Color.accentColor)
+
             ClockMarkers(
                 remaining: ratio,
                 markers: markers,
                 dotSize: 12,
-                inset: 0,
+                inset: 3,
                 upcoming: true
             )
         }
