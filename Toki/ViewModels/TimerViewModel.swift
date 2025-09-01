@@ -19,10 +19,12 @@ final class TimerViewModel: ObservableObject {
         engine.onTick = { [weak self] r in self?.remaining = r }
         engine.onPreAlert = { [weak self] sec in
             let min = sec / 60
+            ring()
             self?.showToast?("\(min)분 남았습니다")
         }
         engine.onFinish = { [weak self] in
             self?.state = .finished
+            ring()
             self?.showToast?("타이머 종료되었습니다")
         }
     }
