@@ -47,5 +47,5 @@ final class Timer {
 
 extension Timer {
     // prealert time components
-    static let presetOffsetsSec: [Int] = [60, 180, 300]
+    static let presetOffsetsSec: [Int] = [60, 180, 300, 600, 900, 1800]
 }

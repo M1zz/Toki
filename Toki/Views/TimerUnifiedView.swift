@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftData
 import SwiftUI
 
 struct TimerUnifiedView: View {
@@ -19,89 +18,19 @@ struct TimerUnifiedView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                // remaining time
-                ZStack {
-                    Clock(
-                        remaining: screenVM.remaining,
-                        total: TimeInterval(screenVM.configuredMainSeconds),
-                    )
+            Group {
+                switch screenVM.timerVM.state {
+                case .idle:
+                    TimerSetupView()
+                        .environmentObject(screenVM)
 
-                    VStack(spacing: 8) {
-                        Text(
-                            screenVM.timeString(
-                                from: screenVM.timerVM.remaining
-                            )
-                        )
-                        .font(
-                            .system(size: 44, weight: .bold, design: .rounded)
-                        )
-                        .monospacedDigit()
-                    }
-                }
+                case .running, .paused:
+                    TimerRunningView()
+                        .environmentObject(screenVM)
 
-                TimerButton(
-                    state: screenVM.timerVM.state,
-                    onStart: { screenVM.start() },
-                    onPause: { screenVM.pause() },
-                    onResume: { screenVM.resume() },
-                    onCancel: { screenVM.cancel() }
-                )
-
-                Divider()
-
-                // timer setting area
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Stepper(
-                            "메인 알림 \(screenVM.mainMinutes)분",
-                            value: $screenVM.mainMinutes,
-                            in: 1...120,
-                            step: 1
-                        )
-                        Spacer()
-                        Button("적용") { screenVM.applyCurrentSettings() }
-                            .buttonStyle(.bordered)
-
-                    }
-
-                    // prealert setting area
-                    let mainSeconds = screenVM.mainMinutes * 60
-                    let presets = Timer.presetOffsetsSec
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("예비 알림").font(.subheadline).foregroundStyle(
-                            .secondary
-                        )
-                        HStack {
-                            ForEach(presets, id: \.self) { sec in
-                                let isDisabled = sec >= mainSeconds
-                                Toggle(
-                                    "\(sec/60)분",
-                                    isOn: Binding(
-                                        get: {
-                                            screenVM.selectedOffsets.contains(
-                                                sec
-                                            )
-                                        },
-                                        set: { on in
-                                            if on {
-                                                screenVM.selectedOffsets.insert(
-                                                    sec
-                                                )
-                                            } else {
-                                                screenVM.selectedOffsets.remove(
-                                                    sec
-                                                )
-                                            }
-                                        }
-                                    )
-                                )
-                                .toggleStyle(.button)
-                                .buttonStyle(.bordered)
-                                .disabled(isDisabled)
-                            }
-                        }
-                    }
+                default:
+                    TimerRunningView()
+                        .environmentObject(screenVM)
                 }
             }
             .padding()
@@ -116,12 +45,12 @@ struct TimerUnifiedView: View {
                 }
                 // notice setting
                 ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink {
-                            NoticeSettingView()
-                        } label: {
-                            Image(systemName: "gearshape")
-                        }
+                    NavigationLink {
+                        NoticeSettingView()
+                    } label: {
+                        Image(systemName: "gearshape")
                     }
+                }
             }
         }
         .sheet(isPresented: $showHistory) {
