@@ -13,7 +13,6 @@ struct SetNotiView: View {
     @Binding var path: [NavigationTarget]
     
     var body: some View {
-        //        NavigationStack {
         VStack(spacing: 10) {
             Text("완료 전 알림 설정")
 

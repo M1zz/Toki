@@ -31,6 +31,12 @@ struct NotificationService {
                 content.sound = UNNotificationSound.default
                 content.badge = 1
                 
+                // 백그라운드에서도 작동하도록 중요도 설정
+                if #available(watchOS 8.0, *) {
+                    content.interruptionLevel = .active  // critical 대신 active 사용
+                    content.relevanceScore = 1.0  // 높은 관련성 점수
+                }
+                
                 // watchOS 전용 haptic 피드백 설정
                 if identifier == "main_timer_notification" {
                     content.userInfo = ["haptic": "success"]
