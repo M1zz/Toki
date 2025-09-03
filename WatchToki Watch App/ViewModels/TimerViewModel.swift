@@ -11,20 +11,12 @@ class TimerViewModel: ObservableObject {
     @Published var timeRemaining: Int
     @Published var isPaused: Bool = false
     
-//    @Published var timer: Timer?
     private var timer: Timer?
     private let notificationService: NotificationService
-    
-//    private let notificaionTime: Int
-//    private var notificationTrigged: Bool = false
     private let mainDuration: Int
     private let notificationTime: Int
     
-//    init(mainDuration: Int, notificationDuration: Int, notificationService: NotificationService = .init()) {
-//        self.timeRemaining = mainDuration
-//        self.notificaionTime = notificationDuration
-//        self.notificationService = notificationService
-//    }
+    
     init(mainDuration: Int, notificationDuration: Int, notificationService: NotificationService = .init()) {
         self.mainDuration = mainDuration
         self.timeRemaining = mainDuration

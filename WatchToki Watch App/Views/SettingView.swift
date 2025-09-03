@@ -16,15 +16,11 @@ struct SettingView: View {
     @StateObject private var settingViewModel = SettingViewModel()
     
     @State private var path: [NavigationTarget] = []
-//    @State private var path = NavigationPath()
     
     var totalTime: Int {
         settingViewModel.time.convertedSecond
     }
     
-//    init(settingViewModel: SettingViewModel) {
-//        self.settingViewModel = settingViewModel
-//    }
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -65,14 +61,6 @@ struct SettingView: View {
                 NavigationLink(value: NavigationTarget.setNotiView) {
                     Text("다음")
                 }
-                
-//                NavigationLink("다음", value: "SetNotiView")
-                
-//                NavigationLink(
-//                    destination: SetNotiView(viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime))
-//                ) {
-//                    Text("다음")
-//                }
             }
             .navigationDestination(for: NavigationTarget.self) { target in
                 switch target {
@@ -86,17 +74,7 @@ struct SettingView: View {
                     ), path: $path)
                     
                 }
-            }
-            
-            
-//            .navigationDestination(for: String.self) { value in
-//                if value == "SetNotiView" {
-//                    SetNotiView(viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime),
-//                                path: $path
-//                    )
-//                }
-//            }
-            
+            }            
         }
     }
 }

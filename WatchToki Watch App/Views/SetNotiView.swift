@@ -11,7 +11,6 @@ struct SetNotiView: View {
     @ObservedObject var viewModel: SetNotiViewModel
     
     @Binding var path: [NavigationTarget]
-//    @Binding var path: NavigationPath
     
     var body: some View {
         //        NavigationStack {
@@ -50,27 +49,7 @@ struct SetNotiView: View {
             NavigationLink(value: NavigationTarget.timerView(mainDuration: viewModel.maxTimeInSeconds, NotificationDuration: viewModel.notiTime.convertedSecond)) {
                 Text("시작")
             }
-            
-//            NavigationLink("시작", value: "TimerView")
-            
-            //                NavigationLink(
-            //                    destination: TimerView(timerViewModel: TimerViewModel(timeRemaining: viewModel.maxTimeInSeconds))
-            //                ) {
-            //                    Text("시작")
-            //                }
         }
-//        .navigationDestination(for: NavigationTarget.self) { target in
-//            switch target {
-//            case .timerView: TimerView(timerViewModel: TimerViewModel(timeRemaining: viewModel.maxTimeInSeconds), path: $path)
-//            default: SetNotiView(viewModel: SetNotiViewModel, path: <#Binding<[NavigationTarget]>#>)
-//            }
-//        }
-        
-//        .navigationDestination(for: String.self) { value in
-//            if value == "TimerView" {
-//                TimerView(timerViewModel: TimerViewModel(timeRemaining: viewModel.maxTimeInSeconds), path: $path)
-//            }
-//        }
     }
 }
 
