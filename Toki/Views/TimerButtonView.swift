@@ -17,11 +17,19 @@ struct TimerButton: View {
 
     var body: some View {
         switch state {
-        case .idle, .finished:
+        case .idle:
             HStack(spacing: 100) {
                 Button("취소", action: onCancel)
                     .buttonStyle(TimerButtonStyle(tint: .gray))
                     .disabled(true)
+                Button("시작", action: onStart)
+                    .buttonStyle(TimerButtonStyle(tint: .green))
+            }
+            
+        case .finished:
+            HStack(spacing: 100) {
+                Button("취소", action: onCancel)
+                    .buttonStyle(TimerButtonStyle(tint: .gray))
                 Button("시작", action: onStart)
                     .buttonStyle(TimerButtonStyle(tint: .green))
             }
