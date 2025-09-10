@@ -8,12 +8,9 @@
 import SwiftUI
 
 public struct TimerView: View {
-    @StateObject private var timerViewModel: TimerViewModel
-//    @ObservedObject var timerViewModel: TimerViewModel
-    
+    @StateObject private var timerViewModel: TimerViewModel    
     @Binding var path: [NavigationTarget]
     
-//    @Binding var path: NavigationPath
     
     init(timerViewModel: TimerViewModel, path: Binding<[NavigationTarget]>) {
         self._timerViewModel = StateObject(wrappedValue: timerViewModel)
