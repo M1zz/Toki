@@ -32,7 +32,7 @@ struct ClockMarkers: View {
 
                     let isUpcoming = t >= remaining
                     Circle()
-                        .fill(isUpcoming ? .red.opacity(0.5) : .red )
+                        .fill(isUpcoming ? .plain.opacity(0.7) : .white )
                         .frame(width: dotSize, height: dotSize)
                         .position(x: x, y: y)
                 }
