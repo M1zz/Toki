@@ -20,34 +20,34 @@ struct TimerButton: View {
         case .idle:
             HStack(spacing: 100) {
                 Button("취소", action: onCancel)
-                    .buttonStyle(TimerButtonStyle(tint: .gray))
+                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
                     .disabled(true)
                 Button("시작", action: onStart)
-                    .buttonStyle(TimerButtonStyle(tint: .green))
+                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
             }
             
         case .finished:
             HStack(spacing: 100) {
                 Button("취소", action: onCancel)
-                    .buttonStyle(TimerButtonStyle(tint: .gray))
+                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
                 Button("시작", action: onStart)
-                    .buttonStyle(TimerButtonStyle(tint: .green))
+                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
             }
 
         case .running:
             HStack(spacing: 100) {
                 Button("취소", action: onCancel)
-                    .buttonStyle(TimerButtonStyle(tint: .gray))
+                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
                 Button("일시정지", action: onPause)
-                    .buttonStyle(TimerButtonStyle(tint: .orange))
+                    .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
             }
 
         case .paused:
             HStack(spacing: 100) {
                 Button("취소", action: onCancel)
-                    .buttonStyle(TimerButtonStyle(tint: .gray))
+                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
                 Button("재개", action: onResume)
-                    .buttonStyle(TimerButtonStyle(tint: .green))
+                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
             }
         }
     }
