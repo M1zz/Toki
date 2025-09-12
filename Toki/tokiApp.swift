@@ -12,6 +12,7 @@ struct tokiApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.dark)
             
         }
         .modelContainer(for: [Timer.self, TimerRecord.self])

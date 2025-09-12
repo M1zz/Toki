@@ -28,33 +28,16 @@ struct TimerRunningView: View {
     var body: some View {
         VStack(spacing: 20) {
             ZStack {
-                Circle()
-                    .stroke(.secondary.opacity(0.25), lineWidth: 12)
-
-                ClockTrack(remaining: ratio)
-                    .stroke(
-                        Color.accentColor,
-                        style: StrokeStyle(
-                            lineWidth: 12,
-                            lineCap: .round,
-                            lineJoin: .round
-                        )
-                    )
-
-                ClockMarkers(
-                    remaining: ratio,
+                Clock(
+                    remaining: screenVM.remaining,
+                    total: TimeInterval(totalSec),
                     markers: markers,
-                    dotSize: 12,
-                    inset: 0,
-                    upcoming: true
                 )
-
+                
                 Text(screenVM.timeString(from: screenVM.timerVM.remaining))
                     .font(.system(size: 44, weight: .bold, design: .rounded))
                     .monospacedDigit()
             }
-            .frame(width: 260, height: 260)
-            .animation(.easeInOut(duration: 0.15), value: ratio)
 
             TimerButton(
                 state: screenVM.timerVM.state,
