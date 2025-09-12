@@ -16,10 +16,6 @@ struct TimerSetupView: View {
             let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
 
             VStack(spacing: 8) {
-                Text("메인 알림 시간")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
                 HStack(spacing: 12) {
                     Picker(
                         "분",
@@ -29,11 +25,14 @@ struct TimerSetupView: View {
                         )
                     ) {
                         ForEach(0...60, id: \.self) { m in
-                            Text("\(m)분").font(.title3)
+                            Text("\(m)").font(.title3)
                         }
                     }
                     .pickerStyle(.wheel)
                     .frame(maxWidth: .infinity)
+                    
+                    Text(":")
+                        .font(.title3)
 
                     Picker(
                         "초",
@@ -43,7 +42,7 @@ struct TimerSetupView: View {
                         )
                     ) {
                         ForEach(0..<60, id: \.self) { s in
-                            Text("\(s)초").font(.title3)
+                            Text("\(s)").font(.title3)
                         }
                     }
                     .pickerStyle(.wheel)
