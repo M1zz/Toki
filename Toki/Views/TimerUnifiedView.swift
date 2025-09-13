@@ -64,6 +64,7 @@ struct TimerUnifiedView: View {
         .onAppear {
             screenVM.attachContext(context)
             screenVM.timerVM.showToast = { toast.show(Toast($0)) }
+            screenVM.showToast = { toast.show(Toast($0)) }
             screenVM.initialConfiguration()
         }
     }

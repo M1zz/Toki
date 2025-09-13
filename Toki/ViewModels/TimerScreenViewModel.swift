@@ -18,6 +18,7 @@ final class TimerScreenViewModel: ObservableObject {
     @Published private(set) var configuredMainSeconds: Int = 600
 
     let timerVM: TimerViewModel
+    var showToast: ((String) -> Void)?
 
     private var context: ModelContext?
     private var bag = Set<AnyCancellable>()
@@ -63,6 +64,7 @@ final class TimerScreenViewModel: ObservableObject {
         configuredMainSeconds = t.mainSeconds
         mainMinutes = max(0, t.mainSeconds) / 60
         mainSeconds = max(0, t.mainSeconds) % 60
+        showTemplateApplyToast(for: t)
         timerVM.start()
     }
 
@@ -75,6 +77,27 @@ final class TimerScreenViewModel: ObservableObject {
         let m = total / 60
         let s = total % 60
         return String(format: "%02d:%02d", m, s)
+    }
+    
+    func showPrealertToast(for seconds: Int, isEnabled: Bool) {
+        let minutes = seconds / 60
+        let message = isEnabled ? "\(minutes)분 예비 알림 활성화" : "\(minutes)분 예비 알림 비활성화"
+        showToast?(message)
+    }
+    
+    func showTemplateApplyToast(for template: Timer) {
+        let mMain = template.mainSeconds / 60
+        let sMain = template.mainSeconds % 60
+        
+        let mainLabel = sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분"
+        
+        let preList = template.prealertOffsetsSec
+            .sorted()
+            .map { "\($0/60)분" }
+            .joined(separator: ", ")
+        
+        let message = preList.isEmpty ? "\(mainLabel), 예비: 없음" : "\(mainLabel), 예비: \(preList)"
+        showToast?(message)
     }
 
     func justConfigure(save: Bool, toast: Bool) {
