@@ -18,6 +18,7 @@ final class TimerScreenViewModel: ObservableObject {
     @Published private(set) var configuredMainSeconds: Int = 600
 
     let timerVM: TimerViewModel
+    var showToast: ((String) -> Void)?
 
     private var context: ModelContext?
     private var bag = Set<AnyCancellable>()
@@ -53,6 +54,7 @@ final class TimerScreenViewModel: ObservableObject {
 
     /// 타이머를 '취소' 하는 경우
     func cancel() {
+        showToast?("취소")
         timerVM.stop()
         justConfigure(save: false, toast: false)
     }
@@ -63,18 +65,49 @@ final class TimerScreenViewModel: ObservableObject {
         configuredMainSeconds = t.mainSeconds
         mainMinutes = max(0, t.mainSeconds) / 60
         mainSeconds = max(0, t.mainSeconds) % 60
+        showTemplateApplyToast(for: t)
         timerVM.start()
     }
 
-    func start() { timerVM.start() }
-    func pause() { timerVM.pause() }
-    func resume() { timerVM.resume() }
+    func start() { 
+        showToast?("시작")
+        timerVM.start() 
+    }
+    func pause() { 
+        showToast?("일시정지")
+        timerVM.pause() 
+    }
+    func resume() { 
+        showToast?("재개")
+        timerVM.resume() 
+    }
 
     func timeString(from interval: TimeInterval) -> String {
         let total = max(0, Int(interval.rounded()))
         let m = total / 60
         let s = total % 60
         return String(format: "%02d:%02d", m, s)
+    }
+    
+    func showPrealertToast(for seconds: Int, isEnabled: Bool) {
+        let minutes = seconds / 60
+        let message = isEnabled ? "\(minutes)분 예비 알림 설정" : "\(minutes)분 예비 알림 해제"
+        showToast?(message)
+    }
+    
+    func showTemplateApplyToast(for template: Timer) {
+        let mMain = template.mainSeconds / 60
+        let sMain = template.mainSeconds % 60
+        
+        let mainLabel = sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분"
+        
+        let preList = template.prealertOffsetsSec
+            .sorted()
+            .map { "\($0/60)분" }
+            .joined(separator: ", ")
+        
+        let message = preList.isEmpty ? "\(mainLabel), 예비: 없음" : "\(mainLabel), 예비: \(preList)"
+        showToast?(message)
     }
 
     func justConfigure(save: Bool, toast: Bool) {

@@ -10,9 +10,11 @@ import SwiftUI
 
 struct TimerUnifiedView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.scenePhase) private var scenePhase
 
     @StateObject private var screenVM = TimerScreenViewModel()
     @StateObject private var toast = ToastManager()
+    @StateObject private var appStateManager = AppStateManager()
 
     @State private var showHistory = false
 
@@ -64,7 +66,12 @@ struct TimerUnifiedView: View {
         .onAppear {
             screenVM.attachContext(context)
             screenVM.timerVM.showToast = { toast.show(Toast($0)) }
+            screenVM.showToast = { toast.show(Toast($0)) }
+            screenVM.timerVM.appStateManager = appStateManager
             screenVM.initialConfiguration()
+        }
+        .onChange(of: scenePhase) { phase in
+            appStateManager.updateState(phase)
         }
     }
 }

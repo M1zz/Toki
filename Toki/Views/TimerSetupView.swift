@@ -92,6 +92,7 @@ struct TimerSetupView: View {
                                                 sec
                                             )
                                         }
+                                        screenVM.showPrealertToast(for: sec, isEnabled: on)
                                     }
                                 )
                             )
