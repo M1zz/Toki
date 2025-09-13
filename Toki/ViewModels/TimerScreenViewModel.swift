@@ -54,6 +54,7 @@ final class TimerScreenViewModel: ObservableObject {
 
     /// 타이머를 '취소' 하는 경우
     func cancel() {
+        showToast?("취소")
         timerVM.stop()
         justConfigure(save: false, toast: false)
     }
@@ -68,9 +69,18 @@ final class TimerScreenViewModel: ObservableObject {
         timerVM.start()
     }
 
-    func start() { timerVM.start() }
-    func pause() { timerVM.pause() }
-    func resume() { timerVM.resume() }
+    func start() { 
+        showToast?("시작")
+        timerVM.start() 
+    }
+    func pause() { 
+        showToast?("일시정지")
+        timerVM.pause() 
+    }
+    func resume() { 
+        showToast?("재개")
+        timerVM.resume() 
+    }
 
     func timeString(from interval: TimeInterval) -> String {
         let total = max(0, Int(interval.rounded()))
@@ -81,7 +91,7 @@ final class TimerScreenViewModel: ObservableObject {
     
     func showPrealertToast(for seconds: Int, isEnabled: Bool) {
         let minutes = seconds / 60
-        let message = isEnabled ? "\(minutes)분 예비 알림 활성화" : "\(minutes)분 예비 알림 비활성화"
+        let message = isEnabled ? "\(minutes)분 예비 알림 설정" : "\(minutes)분 예비 알림 해제"
         showToast?(message)
     }
     
