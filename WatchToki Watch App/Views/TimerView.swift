@@ -8,9 +8,8 @@
 import SwiftUI
 
 public struct TimerView: View {
-    @StateObject private var timerViewModel: TimerViewModel    
+    @StateObject private var timerViewModel: TimerViewModel
     @Binding var path: [NavigationTarget]
-    
     
     init(timerViewModel: TimerViewModel, path: Binding<[NavigationTarget]>) {
         self._timerViewModel = StateObject(wrappedValue: timerViewModel)
@@ -18,20 +17,28 @@ public struct TimerView: View {
     }
     
     public var body: some View {
-        VStack {
-            Text("\(timerViewModel.timeRemaining.formattedTimeString)")
+        VStack(spacing: 16) {
+            // 남은 시간 표시
+            Text(timerViewModel.timeRemaining.formattedTimeString)
+                .font(.system(size: 36, weight: .bold, design: .rounded))
+                .monospacedDigit()
             
-            HStack {
+            HStack(spacing: 12) {
                 Button("취소") {
-                    // 루트뷰로 가야함
+                    // 루트뷰로 이동
                     path = []
+                    timerViewModel.stop()
                 }
+                .buttonStyle(.bordered)
+                .tint(.red)
                 
                 Button(timerViewModel.isPaused ? "재생" : "일시정지") {
                     timerViewModel.togglePause()
                 }
+                .buttonStyle(.borderedProminent)
             }
         }
+        .padding()
         .onAppear {
             timerViewModel.start()
         }
@@ -42,13 +49,3 @@ public struct TimerView: View {
         .navigationTitle("타이머")
     }
 }
-
-
-//#Preview {
-//        TimerView()
-//}
-
-
-// 취소 / 일시정지 
-// 일시정지 -> 타이머 멈춤
-// 취소 타이머 설정으로 돌아가기
