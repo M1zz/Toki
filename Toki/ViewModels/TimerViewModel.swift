@@ -14,16 +14,23 @@ final class TimerViewModel: ObservableObject {
 
     let engine = TimerEngine()
     var showToast: ((String) -> Void)?
+    var appStateManager: AppStateManager?
 
     init() {
         engine.onTick = { [weak self] r in self?.remaining = r }
         engine.onPreAlert = { [weak self] sec in
             let min = sec / 60
-            self?.showToast?("\(min)분 남았습니다")
+            ring()
+            let message = "\(min)분 남았습니다"
+            self?.showToast?(message)
+            self?.appStateManager?.sendNotificationIfNeeded(message)
         }
         engine.onFinish = { [weak self] in
             self?.state = .finished
-            self?.showToast?("타이머 종료되었습니다")
+            ring()
+            let message = "타이머 종료되었습니다"
+            self?.showToast?(message)
+            self?.appStateManager?.sendNotificationIfNeeded(message)
         }
     }
 

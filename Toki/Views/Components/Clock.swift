@@ -11,6 +11,7 @@ import SwiftUI
 struct Clock: View {
     var remaining: TimeInterval
     var total: TimeInterval
+    var markers: [CGFloat] = []
     var size: CGFloat = 240
 
     private var ratio: CGFloat {
@@ -21,14 +22,28 @@ struct Clock: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.secondary.opacity(0.15))
+                .stroke(.plain.opacity(0.5), lineWidth: 8)
 
             ClockTrack(remaining: ratio)
-                .fill(Color.accentColor)
+                .stroke(
+                    Color.accentColor,
+                    style: StrokeStyle(
+                        lineWidth: 8,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+
+            ClockMarkers(
+                remaining: ratio,
+                markers: markers,
+                dotSize: 15,
+                inset: 0,
+                upcoming: true
+            )
         }
-        .frame(width: size, height: size)
+        .frame(width: 240, height: 240)
         .animation(.easeInOut(duration: 0.15), value: ratio)
-        .accessibilityLabel("남은 시간 \(mmss(from: remaining))")
     }
 
     private func mmss(from sec: TimeInterval) -> String {
