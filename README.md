@@ -114,6 +114,8 @@ docs: README 업데이트
 
 #### PR 설명 형식
 ```
+Closes #이슈 번호
+
 Description
 - 변경사항에 대한 상세 설명
 
