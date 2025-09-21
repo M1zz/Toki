@@ -129,6 +129,10 @@ Test Checklist
 
 Screenshot
 <img src="이미지_URL" alt="대체 텍스트" width="200">
+
+Etc.
+- 추가 공유건 1
+- 추가 공유건 2
 ```
 - Screenshot은 UI 변경 사항이 있을 때에만 첨부합니다.
 
