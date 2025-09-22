@@ -27,11 +27,10 @@ struct TimeModel {
 extension Int {
     var formattedTimeString: String {
         let time = TimeModel.fromSecond(self)
-        let hourString = String(format: "%02d", time.hour)
         let minuteString = String(format: "%02d", time.minute)
         let secondString = String(format: "%02d", time.second)
         
-        return "\(hourString):\(minuteString):\(secondString)"
+        return "\(minuteString):\(secondString)"
     }
 }
 
