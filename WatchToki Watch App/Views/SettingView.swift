@@ -27,35 +27,16 @@ struct SettingView: View {
             VStack(spacing: 10) {
                 
                 Text("타이머 시간 설정")
-                
-                HStack {
-                    Picker(selection: $settingViewModel.time.hour, label: Text("시")) {
-                        ForEach(0..<24) { hour in
-                            Text("\(hour)")
-                        }
+                                
+                Picker(selection: $settingViewModel.time.minute, label: Text("분")) {
+                    ForEach(1...60, id: \.self) { minute in
+                        Text("\(minute)")
                     }
-                    .frame(width: 50)
-                    .clipped()
-                    .focusable()
-                    
-                    Picker(selection: $settingViewModel.time.minute, label: Text("분")) {
-                        ForEach(0..<60) { minute in
-                            Text("\(minute)")
-                        }
-                    }
-                    .frame(width: 50)
-                    .clipped()
-                    .focusable()
-                    
-                    Picker(selection: $settingViewModel.time.second, label: Text("초")) {
-                        ForEach(0..<60) { second in
-                            Text("\(second)")
-                        }
-                    }
-                    .frame(width: 50)
-                    .clipped()
-                    .focusable()
                 }
+                .frame(width: 70)
+                .clipped()
+                .focusable()
+                
                 .frame(height: 100)
                 
                 NavigationLink(value: NavigationTarget.setNotiView) {
