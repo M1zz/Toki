@@ -15,34 +15,17 @@ struct SetNotiView: View {
     var body: some View {
         VStack(spacing: 10) {
             Text("완료 전 알림 설정")
-
             
-            let maxHour = viewModel.maxSelectableTimeModel.hour
             let maxMinute = viewModel.maxSelectableTimeModel.minute
-            let maxSecond = viewModel.maxSelectableTimeModel.second
             
-            HStack {
-                Picker(selection: $viewModel.notiTime.hour, label: Text("시")) {
-                    ForEach(0...maxHour, id: \.self) { Text(String(format: "%02d", $0)) }
-                }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
-                
-                Picker(selection: $viewModel.notiTime.minute, label: Text("분")) {
-                    ForEach(0...maxMinute, id: \.self) { Text(String(format: "%02d", $0)) }
-                }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
-                
-                Picker(selection: $viewModel.notiTime.second, label: Text("초")) {
-                    ForEach(0...maxSecond, id: \.self) { Text(String(format: "%02d", $0)) }
-                }
-                .frame(width: 50)
-                .clipped()
-                .focusable()
+            Picker(selection: $viewModel.notiTime.minute, label: Text("분")) {
+                ForEach(0...maxMinute, id: \.self) { minute in
+                    Text("\(minute)") }
             }
+            .frame(width: 70)
+            .clipped()
+            .focusable()
+            
             .frame(height: 100)
             
             NavigationLink(value: NavigationTarget.timerView(mainDuration: viewModel.maxTimeInSeconds, NotificationDuration: viewModel.notiTime.convertedSecond)) {

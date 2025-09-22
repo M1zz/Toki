@@ -33,7 +33,7 @@ struct SettingView: View {
                         Text("\(minute)")
                     }
                 }
-                .frame(width: 50)
+                .frame(width: 70)
                 .clipped()
                 .focusable()
                 
