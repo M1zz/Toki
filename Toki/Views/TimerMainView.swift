@@ -11,19 +11,15 @@ struct TimerMainView: View {
     @EnvironmentObject var screenVM: TimerScreenViewModel
     var size: CGFloat = 240
     var lineWidth: CGFloat = 20
-    private var totalSec: Int { screenVM.configuredMainSeconds }
     private var remaining: TimeInterval { screenVM.remaining }
     
     private var ratio: CGFloat {
-        guard totalSec > 0 else { return 0 }
-        return CGFloat(max(0, min(1, remaining / TimeInterval(totalSec))))
+        return CGFloat(max(0, min(1, remaining / TimeInterval(TimeMapper.maxSeconds))))
     }
     private var markers: [CGFloat] {
-        guard totalSec > 0 else { return [] }
         return screenVM.selectedOffsets
-            .filter { 0 < $0 && $0 < totalSec }
             .sorted()
-            .map { CGFloat($0) / CGFloat(totalSec) }
+            .map { CGFloat($0) / TimeInterval(TimeMapper.maxSeconds) }
     }
 
     var body: some View {
@@ -34,13 +30,14 @@ struct TimerMainView: View {
                 ZStack {
                     ForEach(1...TimeMapper.tickCount, id: \.self) { index in
                         Rectangle()
-                            .fill(.black)
+                            .fill(.plain.opacity(0.8))
                             .frame(
                                 width: index % 5 == 0 ? 3 : 2,
                                 height: index % 5 == 0
                                     ? lineWidth / 2 : lineWidth / 4
                             )
-                            .offset(y: (size - lineWidth) / 2 - 2)
+                            .offset(y: index % 5 == 0
+                                    ? (size - lineWidth) / 2 - lineWidth / 4 : (size - lineWidth) / 2 - lineWidth / 8)
                             .rotationEffect(.init(degrees: Double(index) * 6))
                     }
                 }
@@ -48,7 +45,7 @@ struct TimerMainView: View {
                 // 원형 배경
                 Circle()
                     .stroke(
-                        .gray,
+                        .plain.opacity(0.5),
                         style: StrokeStyle(
                             lineWidth: lineWidth,
                             lineCap: .round,
@@ -56,21 +53,12 @@ struct TimerMainView: View {
                         )
                     )
                     .frame(width: size, height: size)
-
-//                ClockMarkers(
-//                    remaining: ratio,
-//                    markers: markers,
-//                    dotSize: 15,
-//                    inset: 0,
-//                    upcoming: true
-//                )
-//                .frame(width: size, height: size)
                 
                 // Progress
                 Circle()
                     .trim(
                         from: 0,
-                        to: screenVM.mainAngle / TimeMapper.maxAngle
+                        to: screenVM.state == .running ? screenVM.timerVM.remaining / TimeMapper.maxAngle / TimeMapper.secondsPerDegree : screenVM.mainAngle / TimeMapper.maxAngle
                     )
                     .stroke(
                         Color.accentColor,
@@ -83,29 +71,43 @@ struct TimerMainView: View {
                     .frame(width: size, height: size)
                     .rotationEffect(.init(degrees: -90))
                 
+                ClockMarkers(
+                    remaining: ratio,
+                    markers: markers,
+                    dotSize: lineWidth,
+                    inset: 0,
+                    upcoming: true
+                )
+                .frame(width: size, height: size)
+                
                 // Drag Pointer
-                Circle()
-                    .fill(.white)
-                    .frame(width: lineWidth, height: lineWidth)
-                    .offset(x: size / 2)
-                    .rotationEffect(.degrees(screenVM.mainAngle))
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                withAnimation(.linear(duration: 0.3)) {
-                                    onDrag(value: value)
+                if (screenVM.state != .running) {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: lineWidth, height: lineWidth)
+                        .offset(x: size / 2)
+                        .rotationEffect(.degrees(screenVM.mainAngle))
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    withAnimation(.linear(duration: 0.3)) {
+                                        onDrag(value: value)
+                                    }
                                 }
-                            }
-                            .onEnded { _ in
-                                let snapped = snappedAngle(from: screenVM.mainAngle)
-                                withAnimation {
-                                    screenVM.mainAngle = snapped
+                                .onEnded { _ in
+                                    let snapped = snappedAngle(from: screenVM.mainAngle)
+                                    withAnimation {
+                                        screenVM.mainAngle = snapped
+                                    }
                                 }
-                            }
-                    )
-                    .rotationEffect(.init(degrees: -90))
+                        )
+                        .rotationEffect(.init(degrees: -90))
+                }
 
-                Text(screenVM.state == .running ? mmss(from:  screenVM.configuredMainSeconds) : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes))
+                
+                Text(screenVM.state == .running ? screenVM.timeString(from: screenVM.timerVM.remaining) : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes))
+                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .monospacedDigit()
             }
             
             TimerButton(
@@ -160,9 +162,6 @@ struct TimerMainView: View {
                     }
                 }
             }
-        }
-        .onAppear() {
-            print(screenVM.mainAngle / TimeMapper.maxAngle)
         }
     }
     

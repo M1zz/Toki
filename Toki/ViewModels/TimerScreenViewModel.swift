@@ -204,6 +204,9 @@ extension TimerScreenViewModel {
             self.mainSeconds = s
         }
     }
+    var configureMainAngle: Double {
+        TimeMapper.secondsToAngle(from: configuredMainSeconds)
+    }
 }
 
 enum TimeMapper {
