@@ -22,16 +22,16 @@ struct TimerUnifiedView: View {
         NavigationStack {
             Group {
                 switch screenVM.timerVM.state {
-                case .idle:
-                    TimerSetupView()
-                        .environmentObject(screenVM)
-
-                case .running, .paused:
-                    TimerRunningView()
-                        .environmentObject(screenVM)
+//                case .idle:
+//                    TimerSetupView()
+//                        .environmentObject(screenVM)
+//
+//                case .running, .paused:
+//                    TimerRunningView()
+//                        .environmentObject(screenVM)
 
                 default:
-                    TimerRunningView()
+                    TimerMainView()
                         .environmentObject(screenVM)
                 }
             }
