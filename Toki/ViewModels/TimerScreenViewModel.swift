@@ -189,3 +189,38 @@ extension TimerScreenViewModel {
         }
     }
 }
+
+extension TimerScreenViewModel {
+    var mainAngle: Double {
+        get {
+            let totalSeconds = max(0, mainMinutes) * 60 + max(0, min(59, mainSeconds))
+            return TimeMapper.secondsToAngle(from: totalSeconds)
+        }
+        set {
+            let totalSeconds = TimeMapper.angleToSeconds(from: newValue)
+            let m = totalSeconds / 60
+            let s = totalSeconds % 60
+            self.mainMinutes = m
+            self.mainSeconds = s
+        }
+    }
+    var configureMainAngle: Double {
+        TimeMapper.secondsToAngle(from: configuredMainSeconds)
+    }
+}
+
+enum TimeMapper {
+    static let secondsPerDegree = 10.0  // 1° = 10초
+    static let maxSeconds = 3600
+    static let maxAngle = Double(maxSeconds) / secondsPerDegree
+    static let tickCount = 60
+
+    static func secondsToAngle(from s: Int) -> Double {
+        let clamped = max(0, min(s, maxSeconds))
+        return Double(clamped) / secondsPerDegree
+    }
+    static func angleToSeconds(from a: Double) -> Int {
+        let clamped = max(0, min(a, maxAngle))
+        return Int(round(clamped)) * Int(secondsPerDegree)
+    }
+}
