@@ -18,10 +18,27 @@ public struct TimerView: View {
     
     public var body: some View {
         VStack(spacing: 16) {
-            // 남은 시간 표시
-            Text(timerViewModel.timeRemaining.formattedTimeString)
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .monospacedDigit()
+            
+            Spacer()
+
+            // 프로그래스바
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 8)
+                    .frame(width: 110, height: 110)
+                
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .frame(width: 110, height: 110)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.linear(duration: 1), value: progress)
+                
+                // 남은 시간 표시
+                Text(timerViewModel.timeRemaining.formattedTimeString)
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+            }
             
             HStack(spacing: 12) {
                 Button("취소") {
@@ -30,7 +47,7 @@ public struct TimerView: View {
                     timerViewModel.stop()
                 }
                 .buttonStyle(.bordered)
-                .tint(.red)
+                .tint(.gray)
                 
                 Button(timerViewModel.isPaused ? "재생" : "일시정지") {
                     timerViewModel.togglePause()
@@ -47,5 +64,11 @@ public struct TimerView: View {
         }
         .navigationBarBackButtonHidden(true)
         .navigationTitle("타이머")
+    }
+    
+    // 프로그래스 계산
+    private var progress: Double {
+        guard timerViewModel.mainDuration > 0 else { return 0 }
+        return Double(timerViewModel.timeRemaining) / Double(timerViewModel.mainDuration)
     }
 }
