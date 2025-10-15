@@ -16,7 +16,7 @@ struct TimerSetupView: View {
             let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
 
             VStack(spacing: 8) {
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     Picker(
                         "분",
                         selection: Binding<Int>(
@@ -29,24 +29,9 @@ struct TimerSetupView: View {
                         }
                     }
                     .pickerStyle(.wheel)
-                    .frame(maxWidth: .infinity)
+                    .frame(width: 60)
                     
-                    Text(":")
-                        .font(.title3)
-
-                    Picker(
-                        "초",
-                        selection: Binding<Int>(
-                            get: { screenVM.mainSeconds },
-                            set: { screenVM.mainSeconds = $0 }
-                        )
-                    ) {
-                        ForEach(0..<60, id: \.self) { s in
-                            Text("\(s)").font(.title3)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(maxWidth: .infinity)
+                    Text("분").font(.title3)
                 }
                 .frame(height: 180)
             }

@@ -8,9 +8,8 @@
 import SwiftUI
 
 public struct TimerView: View {
-    @StateObject private var timerViewModel: TimerViewModel    
+    @StateObject private var timerViewModel: TimerViewModel
     @Binding var path: [NavigationTarget]
-    
     
     init(timerViewModel: TimerViewModel, path: Binding<[NavigationTarget]>) {
         self._timerViewModel = StateObject(wrappedValue: timerViewModel)
@@ -18,37 +17,83 @@ public struct TimerView: View {
     }
     
     public var body: some View {
-        VStack {
-            Text("\(timerViewModel.timeRemaining.formattedTimeString)")
-            
-            HStack {
-                Button("취소") {
-                    // 루트뷰로 가야함
-                    path = []
-                }
+        VStack(spacing: 12) {
+            Spacer(minLength: 0)
+
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 8)
+                    .frame(width: 120, height: 120)
                 
-                Button(timerViewModel.isPaused ? "재생" : "일시정지") {
-                    timerViewModel.togglePause()
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        Color.accentColor,
+                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                    )
+                    .frame(width: 120, height: 120)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.linear(duration: 1), value: progress)
+                
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 15, height: 15)
+                    .offset(alertMarkerOffset(ringSize: 123, lineWidth: 8))
+                
+                Text(timerViewModel.timeRemaining.formattedTimeString)
+                    .font(.system(size: 38, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .minimumScaleFactor(0.5)
+            }
+
+            HStack(spacing: 12) {
+                Button {
+                    path = []
+                    timerViewModel.stop()
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .font(.system(size: 22, weight: .semibold))
                 }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+                .frame(height: 44)
+                .accessibilityLabel("취소")
+
+                Button {
+                    timerViewModel.togglePause()
+                } label: {
+                    Image(systemName: timerViewModel.isPaused ? "play.fill" : "pause.fill")
+                        .font(.system(size: 22, weight: .semibold))
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(height: 44)
+                .accessibilityLabel(timerViewModel.isPaused ? "재생" : "일시정지")
             }
         }
-        .onAppear {
-            timerViewModel.start()
-        }
-        .onDisappear {
-            timerViewModel.stop()
-        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
+        .onAppear { timerViewModel.start() }
+        .onDisappear { timerViewModel.stop() }
         .navigationBarBackButtonHidden(true)
-        .navigationTitle("타이머")
+    }
+    
+    private var progress: Double {
+        guard timerViewModel.mainDuration > 0 else { return 0 }
+        return Double(timerViewModel.timeRemaining) / Double(timerViewModel.mainDuration)
+    }
+    
+    private var alertMarkerProgress: Double {
+        guard timerViewModel.mainDuration > 0 else { return 0 }
+        let alertTimeRemaining = timerViewModel.mainDuration - timerViewModel.notificationTime
+        return Double(alertTimeRemaining) / Double(timerViewModel.mainDuration)
+    }
+    
+    private func alertMarkerOffset(ringSize: CGFloat, lineWidth: CGFloat) -> CGSize {
+        let radius = ringSize / 2
+        let r = radius - (lineWidth * 0.25)
+        let angle = Angle.degrees(-90 + (360 * alertMarkerProgress))
+        let x = cos(angle.radians) * r
+        let y = sin(angle.radians) * r
+        return CGSize(width: x, height: y)
     }
 }
-
-
-//#Preview {
-//        TimerView()
-//}
-
-
-// 취소 / 일시정지 
-// 일시정지 -> 타이머 멈춤
-// 취소 타이머 설정으로 돌아가기
