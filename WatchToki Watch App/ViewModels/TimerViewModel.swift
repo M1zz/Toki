@@ -13,9 +13,12 @@ class TimerViewModel: ObservableObject {
     
     private var timer: Timer?
     private let notificationService: NotificationService
-    private let mainDuration: Int
-    private let notificationTime: Int
+    let mainDuration: Int
+    let notificationTime: Int
     
+    private var startDate: Date?        // 타이머 시작 시각
+    private var pauseDate: Date?        // 일시정지한 시각
+    private var accumulatedPause: TimeInterval = 0 // 총 정지 시간
     
     init(mainDuration: Int, notificationDuration: Int, notificationService: NotificationService = .init()) {
         self.mainDuration = mainDuration
@@ -24,67 +27,62 @@ class TimerViewModel: ObservableObject {
         self.notificationService = notificationService
     }
     
-
+    // MARK: - Public Methods
     
     func start() {
+        startDate = Date()
+        accumulatedPause = 0
+        isPaused = false
+        
         startTimer()
         
-        // 기존 알림 모두 제거
+        // 알림 초기화
         notificationService.removeAllNotifications()
-        
-        // 타이머 완료 알림 예약
-        notificationService.scheduleNotification(timeInterval: TimeInterval(mainDuration), title: "타이머 종료", body: "설정한 시간이 종료되었습니다.", identifier: "main_timer_notification")
-        
-        // 종료 전 알림 예약 (notificationTime이 0보다 클 때만)
-        if notificationTime > 0 {
-            let pointNotificationTime = mainDuration - notificationTime
-            if pointNotificationTime > 0 {
-                notificationService.scheduleNotification(timeInterval: TimeInterval(pointNotificationTime), title: "지정 알림", body: "완료 \(notificationTime.formattedTimeString) 전입니다.", identifier: "point_timer_notification")
-            }
-        }
+        scheduleNotifications(for: mainDuration)
     }
     
     func stop() {
         stopTimer()
+        startDate = nil
+        pauseDate = nil
+        accumulatedPause = 0
+        timeRemaining = mainDuration
         
         notificationService.removeAllNotifications()
     }
     
     func togglePause() {
-        self.isPaused.toggle()
+        isPaused.toggle()
+        
         if isPaused {
+            // 멈춤 상태 기록
+            pauseDate = Date()
             stopTimer()
             notificationService.removeAllNotifications()
         } else {
-            // 기존 알림 모두 제거
+            // 정지 시간 보정
+            if let pauseDate {
+                accumulatedPause += Date().timeIntervalSince(pauseDate)
+            }
+            self.pauseDate = nil
+            
+            // 알림 재설정
             notificationService.removeAllNotifications()
-            
-            // 타이머 완료 알림 예약 (남은 시간 기준)
-            notificationService.scheduleNotification(timeInterval: TimeInterval(timeRemaining), title: "타이머 종료", body: "설정한 시간이 종료되었습니다.", identifier: "main_timer_notification")
-            
-            // 종료 전 알림 예약 (남은 시간이 종료 전 알림 시간보다 클 때만)
-            if notificationTime > 0 && timeRemaining > notificationTime {
-                let remainingPointTime = timeRemaining - notificationTime
-                if remainingPointTime > 0 {
-                    notificationService.scheduleNotification(timeInterval: TimeInterval(remainingPointTime), title: "지정 알림", body: "완료 \(notificationTime.formattedTimeString) 전입니다.", identifier: "point_timer_notification")
-                }
+            if timeRemaining > 0 {
+                scheduleNotifications(for: timeRemaining)
             }
             
             startTimer()
         }
     }
     
+    // MARK: - Private Methods
     
     private func startTimer() {
         guard timer == nil else { return }
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {
-            _ in
-            if self.timeRemaining > 0 {
-                self.timeRemaining -= 1
-            } else {
-                self.stopTimer()
-            }
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.updateTimeRemaining()
         }
     }
     
@@ -93,10 +91,42 @@ class TimerViewModel: ObservableObject {
         timer = nil
     }
     
+    private func updateTimeRemaining() {
+        guard let startDate else { return }
+        
+        // 실제 경과 시간 = (현재 - 시작) - 멈췄던 시간
+        let elapsed = Date().timeIntervalSince(startDate) - accumulatedPause
+        let remaining = max(mainDuration - Int(elapsed), 0)
+        
+        self.timeRemaining = remaining
+        
+        if remaining == 0 {
+            stopTimer()
+        }
+    }
+    
+    private func scheduleNotifications(for duration: Int) {
+        // 메인 완료 알림
+        notificationService.scheduleNotification(
+            timeInterval: TimeInterval(duration),
+            title: "타이머 종료",
+            body: "설정한 시간이 종료되었습니다.",
+            identifier: "main_timer_notification"
+        )
+        
+        // 종료 전 알림
+        if notificationTime > 0 && duration > notificationTime {
+            let pointTime = duration - notificationTime
+            notificationService.scheduleNotification(
+                timeInterval: TimeInterval(pointTime),
+                title: "지정 알림",
+                body: "완료 \(notificationTime.formattedTimeString) 전입니다.",
+                identifier: "point_timer_notification"
+            )
+        }
+    }
+    
     deinit {
         stop()
     }
-    
 }
-
-
