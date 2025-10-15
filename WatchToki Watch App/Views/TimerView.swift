@@ -17,58 +17,83 @@ public struct TimerView: View {
     }
     
     public var body: some View {
-        VStack(spacing: 16) {
-            
-            Spacer()
+        VStack(spacing: 12) {
+            Spacer(minLength: 0)
 
-            // 프로그래스바
             ZStack {
                 Circle()
                     .stroke(Color.gray.opacity(0.5), lineWidth: 8)
-                    .frame(width: 110, height: 110)
+                    .frame(width: 120, height: 120)
                 
                 Circle()
                     .trim(from: 0, to: progress)
-                    .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                    .frame(width: 110, height: 110)
+                    .stroke(
+                        Color.accentColor,
+                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                    )
+                    .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1), value: progress)
                 
-                // 남은 시간 표시
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 15, height: 15)
+                    .offset(alertMarkerOffset(ringSize: 123, lineWidth: 8))
+                
                 Text(timerViewModel.timeRemaining.formattedTimeString)
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .font(.system(size: 38, weight: .bold, design: .rounded))
                     .monospacedDigit()
+                    .minimumScaleFactor(0.5)
             }
-            
+
             HStack(spacing: 12) {
-                Button("취소") {
-                    // 루트뷰로 이동
+                Button {
                     path = []
                     timerViewModel.stop()
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .font(.system(size: 22, weight: .semibold))
                 }
                 .buttonStyle(.bordered)
                 .tint(.gray)
-                
-                Button(timerViewModel.isPaused ? "재생" : "일시정지") {
+                .frame(height: 44)
+                .accessibilityLabel("취소")
+
+                Button {
                     timerViewModel.togglePause()
+                } label: {
+                    Image(systemName: timerViewModel.isPaused ? "play.fill" : "pause.fill")
+                        .font(.system(size: 22, weight: .semibold))
                 }
                 .buttonStyle(.borderedProminent)
+                .frame(height: 44)
+                .accessibilityLabel(timerViewModel.isPaused ? "재생" : "일시정지")
             }
         }
-        .padding()
-        .onAppear {
-            timerViewModel.start()
-        }
-        .onDisappear {
-            timerViewModel.stop()
-        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
+        .onAppear { timerViewModel.start() }
+        .onDisappear { timerViewModel.stop() }
         .navigationBarBackButtonHidden(true)
-        .navigationTitle("타이머")
     }
     
-    // 프로그래스 계산
     private var progress: Double {
         guard timerViewModel.mainDuration > 0 else { return 0 }
         return Double(timerViewModel.timeRemaining) / Double(timerViewModel.mainDuration)
+    }
+    
+    private var alertMarkerProgress: Double {
+        guard timerViewModel.mainDuration > 0 else { return 0 }
+        let alertTimeRemaining = timerViewModel.mainDuration - timerViewModel.notificationTime
+        return Double(alertTimeRemaining) / Double(timerViewModel.mainDuration)
+    }
+    
+    private func alertMarkerOffset(ringSize: CGFloat, lineWidth: CGFloat) -> CGSize {
+        let radius = ringSize / 2
+        let r = radius - (lineWidth * 0.25)
+        let angle = Angle.degrees(-90 + (360 * alertMarkerProgress))
+        let x = cos(angle.radians) * r
+        let y = sin(angle.radians) * r
+        return CGSize(width: x, height: y)
     }
 }

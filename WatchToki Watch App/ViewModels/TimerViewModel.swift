@@ -14,7 +14,7 @@ class TimerViewModel: ObservableObject {
     private var timer: Timer?
     private let notificationService: NotificationService
     let mainDuration: Int
-    private let notificationTime: Int
+    let notificationTime: Int
     
     private var startDate: Date?        // 타이머 시작 시각
     private var pauseDate: Date?        // 일시정지한 시각
