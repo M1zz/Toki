@@ -23,9 +23,10 @@ final class AppStateManager: ObservableObject {
     }
     
     func sendNotificationIfNeeded(_ message: String) {
-        if isInBackground {
-            pushPrealertNotice(message: message)
-        }
+//        if isInBackground {
+//            pushPrealertNotice(message: message)
+//        }
+        pushPrealertNotice(message: message)
     }
 }
 
