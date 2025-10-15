@@ -91,6 +91,10 @@ struct SettingView: View {
         let selectionOffset: CGFloat
 
         @State private var scrollID: Int?
+        
+        @State private var isUserScrolling: Bool = false
+        @State private var pendingMinute: Int? = nil
+        @State private var snapToken: Int = 0
 
         private let rowHeight: CGFloat = 45
 
@@ -99,7 +103,7 @@ struct SettingView: View {
                 VStack(spacing: 0) {
                     ForEach(Array(range), id: \.self) { minute in
                         Text("\(minute)")
-                            .font(.system(size: 40, weight: .semibold, design: .rounded))
+                            .font(.system(size: minute == selectedMinute ? 40 : 34, weight: minute == selectedMinute ? .semibold : .regular, design: .rounded))
                             .monospacedDigit()
                             .foregroundStyle(minute == selectedMinute ? Color.white : Color.gray.opacity(0.5))
                             .frame(height: rowHeight)
@@ -115,6 +119,21 @@ struct SettingView: View {
             .contentMargins(.vertical, (90 - rowHeight) / 2, for: .scrollContent)
             .contentMargins(.vertical, selectionOffset, for: .scrollContent)
             .scrollPosition(id: $scrollID)
+            .onScrollPhaseChange { phase, arg   in
+                switch phase {
+                case .idle:
+                    isUserScrolling = false
+                    // when idle, commit pending minute if any
+                    let final = pendingMinute ?? scrollID
+                    if let final, selectedMinute != final {
+                        selectedMinute = final
+                        snapToken &+= 1
+                    }
+                    pendingMinute = nil
+                default:
+                    isUserScrolling = true
+                }
+            }
             .onChange(of: scrollID) { _, newID in
                 if let m = newID { selectedMinute = m }
             }
