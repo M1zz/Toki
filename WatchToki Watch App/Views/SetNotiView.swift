@@ -78,7 +78,7 @@ struct SetNotiView: View {
             }
             path.append(.timerView(mainDuration: viewModel.maxTimeInSeconds, NotificationDuration: viewModel.notiTime.convertedSecond))
         } label: {
-            Text("완료 전 알림")
+            Text("후 알림")
         }
         .buttonStyle(.borderedProminent)
         .clipShape(RoundedRectangle(cornerRadius: 8))

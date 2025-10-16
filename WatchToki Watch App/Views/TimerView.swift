@@ -84,16 +84,19 @@ public struct TimerView: View {
     
     private var alertMarkerProgress: Double {
         guard timerViewModel.mainDuration > 0 else { return 0 }
-        let alertTimeRemaining = timerViewModel.mainDuration - timerViewModel.notificationTime
-        return Double(alertTimeRemaining) / Double(timerViewModel.mainDuration)
+        // Elapsed fraction when the alert should fire. Example: 10m total, alert at 3m remaining -> 0.7
+        let value = 1.0 - (Double(timerViewModel.notificationTime) / Double(timerViewModel.mainDuration))
+        return min(max(value, 0.0), 1.0)
     }
     
     private func alertMarkerOffset(ringSize: CGFloat, lineWidth: CGFloat) -> CGSize {
         let radius = ringSize / 2
         let r = radius - (lineWidth * 0.25)
-        let angle = Angle.degrees(-90 + (360 * alertMarkerProgress))
+        // Place marker clockwise from the top to match the visual expectation
+        let angle = Angle.degrees(-90 - (360 * alertMarkerProgress))
         let x = cos(angle.radians) * r
         let y = sin(angle.radians) * r
         return CGSize(width: x, height: y)
     }
 }
+
