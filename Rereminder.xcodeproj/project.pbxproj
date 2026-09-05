@@ -193,7 +193,6 @@
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
 				DesignSystem/RoundedRectRing.swift,
-				DesignSystem/SectionInnerRing.swift,
 				DesignSystem/SectionPalette.swift,
 				Modules/AppName.swift,
 				Modules/EscalatingAlert.swift,
