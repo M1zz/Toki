@@ -1263,6 +1263,28 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 맥에서는 자기 자신의 연결 상태를 보여주지 않는다(`DevicePresence` 가 자기 기기를 세지 않으므로
   그대로 두면 "Mac 연결 안 됨"이 늘 떠 있다).
 
+### 앱 이름 — 타겟마다 `InfoPlist.xcstrings` 가 있어야 한다
+`INFOPLIST_KEY_CFBundleDisplayName = "두번알림"` 이 메인 앱·워치 앱·App Clip 세 타겟의 빌드
+설정에 박혀 있다. 이 값은 **생성된 Info.plist 의 기본값**일 뿐이고, 언어별 이름은 각 타겟 폴더의
+`InfoPlist.xcstrings` 가 만든다(`<lang>.lproj/InfoPlist.strings` 로 컴파일돼 기본값을 덮는다).
+
+- ⚠️ **그 파일이 없는 타겟은 전 언어에서 한국어 이름이 나온다.** 2.2.4 까지 카탈로그가
+  메인 앱에만 있어서, 영어권 사용자의 iPhone 홈 화면은 "Rereminder" 인데 **Apple Watch 앱
+  목록에는 "두번알림"** 이 떴다(App Clip 도 같았다). 워치 화면 문구는 영어라 이름만 한국어로
+  남아 더 눈에 띈다.
+- 지금은 셋 다 갖고 있다 — `Rereminder/`·`RereminderWatch/`·`RereminderClip/InfoPlist.xcstrings`.
+  **새 타겟에 사용자에게 보이는 이름을 붙일 때는 카탈로그도 함께 만들 것.**
+- 세 폴더 모두 Xcode 동기화 그룹이라 **파일을 넣으면 자동으로 잡힌다**(pbxproj 배선 불필요).
+- 검증법: 빌드한 번들에서 언어별로 확인한다. `Info.plist` 만 보면 늘 기본값이라 못 잡는다.
+  ```bash
+  plutil -p <번들>/en.lproj/InfoPlist.strings | grep DisplayName   # Rereminder 여야 한다
+  ```
+- ⚠️ **App Store Connect 의 인앱결제 이름은 이것과 별개다.** 지금 `com.xa.toki.pro` 의 표시
+  이름이 한국어("두번알림 pro") 하나뿐이라 **미국 스토어 리스팅과 결제 확인 시트에 한국어가
+  나간다.** ASC 의 인앱결제 > 현지화에서 영어를 추가해야 한다(코드로는 못 고친다).
+  앱 안에서는 안 샌다 — 페이월은 지역화된 `AppName.pro` 를 쓰고, ASC 이름을 읽는
+  `StoreManager.proDisplayName` 은 어느 화면에서도 쓰이지 않는다.
+
 ## 빌드 환경
 - **Xcode**: 15.0+
 - **iOS Deployment Target**: iOS 26.0 (프로젝트 설정 기준 — 문서에 16.0 으로 적혀 있던 건 옛날 값)
