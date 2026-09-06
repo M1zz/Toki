@@ -18,7 +18,6 @@ struct TimerMainView: View {
 
     /// 글자 크기 설정. 접근성 크기에서는 원이 자리를 양보한다(`clockHeightRatio`).
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var isDragging = false
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
@@ -43,12 +42,10 @@ struct TimerMainView: View {
     @State private var draggingMarkerOffset: Int?
     @State private var markerDragAngle: Double = 0
 
-    /// 자르지 않은 손가락 각도 — 종이 끝에 걸려도 손가락은 계속 따라가야 튀지 않는다
-    @State private var markerFingerAngle: Double = 0
-    /// 잡은 순간 종과 손가락이 어긋나 있던 만큼. 이걸 유지해야 집는 순간 종이 손끝으로 순간이동하지 않는다
-    @State private var markerGrabDelta: Double = 0
-    @State private var mainFingerAngle: Double = 0
-    @State private var mainGrabDelta: Double = 0
+    /// 종 노브·흰 핸들의 각도 추적 — 잡은 어긋남 유지, 각도 이어 붙이기, 마지막에 한 번만 자르기.
+    /// App Clip 의 `ClipClock` 도 **같은 `DialDragTracker`** 를 쓴다 (규칙이 갈라지지 않게).
+    @State private var markerDrag = DialDragTracker()
+    @State private var mainDrag = DialDragTracker()
 
     /// 다이얼 중심을 알아야 각도를 계산할 수 있어, 회전에 휘둘리지 않는 고정 좌표계를 따로 둔다
     private static let dialSpace = "rereminder.dial"
@@ -675,8 +672,8 @@ struct TimerMainView: View {
         .frame(width: size, height: size)
         .coordinateSpace(name: Self.dialSpace)
         // 손끝의 딸깍 — **스냅된 값**이 한 칸 바뀔 때만 온다(각도에 반응시키면 초당 수십 번 울린다)
-        .dialTickFeedback(isDragging ? TimeMapper.angleToSeconds(from: screenVM.mainAngle) : nil)
-        .dialGrabFeedback(isDragging: isDragging)
+        .dialTickFeedback(mainDrag.isActive ? TimeMapper.angleToSeconds(from: screenVM.mainAngle) : nil)
+        .dialGrabFeedback(isDragging: mainDrag.isActive)
         .accessibilityHidden(true)
     }
 
@@ -689,24 +686,19 @@ struct TimerMainView: View {
                 showDragTooltip = true
                 dragTooltipLingerTask?.cancel()
 
-                if !isDragging {
-                    isDragging = true
-                    // 손가락은 핸들 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
-                    let grabbed = TimeMapper.ringAngle(at: value.startLocation, center: center)
-                    mainFingerAngle = grabbed
-                    mainGrabDelta = screenVM.mainAngle - grabbed
+                if !mainDrag.isActive {
+                    mainDrag.begin(at: value.startLocation,
+                                   center: center,
+                                   knobAngle: screenVM.mainAngle)
                 }
 
-                let finger = TimeMapper.ringAngle(at: value.location, center: center)
-                mainFingerAngle = TimeMapper.unwrappedAngle(finger, continuing: mainFingerAngle)
-                let angle = mainFingerAngle + mainGrabDelta
-                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
-                screenVM.mainAngle = max(0, min(angle, TimeMapper.maxAngle))
-
+                screenVM.mainAngle = mainDrag.update(to: value.location,
+                                                     center: center,
+                                                     maxAngle: TimeMapper.maxAngle)
                 dragTooltipAngle = screenVM.mainAngle - 90
             }
             .onEnded { _ in
-                isDragging = false
+                mainDrag.end()
                 let snapped = snappedAngle(from: screenVM.mainAngle)
                 screenVM.mainAngle = snapped
                 dragTooltipAngle = snapped - 90
@@ -796,33 +788,25 @@ struct TimerMainView: View {
 
                                 if draggingMarkerOffset != offsetSec {
                                     draggingMarkerOffset = offsetSec
-                                    // 손가락은 종 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
-                                    let grabbed = TimeMapper.ringAngle(
+                                    markerDrag.begin(
                                         at: value.startLocation,
-                                        center: center
+                                        center: center,
+                                        knobAngle: Double(offsetSec) / TimeMapper.secondsPerDegree
                                     )
-                                    markerFingerAngle = grabbed
-                                    markerGrabDelta =
-                                        Double(offsetSec) / TimeMapper.secondsPerDegree - grabbed
                                 }
                                 markerLingerTask?.cancel()
                                 lingeringMarkerOffset = nil
 
-                                let finger = TimeMapper.ringAngle(at: value.location, center: center)
-                                markerFingerAngle = TimeMapper.unwrappedAngle(
-                                    finger,
-                                    continuing: markerFingerAngle
-                                )
-
                                 let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
-                                let maxAngle = Double(mainSec - 10) / TimeMapper.secondsPerDegree
-                                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
-                                markerDragAngle = max(
-                                    0,
-                                    min(markerFingerAngle + markerGrabDelta, max(0, maxAngle))
+                                markerDragAngle = markerDrag.update(
+                                    to: value.location,
+                                    center: center,
+                                    // 알림은 총 시간보다 10초 앞이어야 의미가 있다
+                                    maxAngle: DialDragTracker.maxAlertAngle(totalSeconds: mainSec)
                                 )
                             }
                             .onEnded { _ in
+                                markerDrag.end()
                                 guard let dragOffset = draggingMarkerOffset else { return }
                                 let newSec = TimeMapper.angleToSeconds(from: markerDragAngle)
                                 let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds

@@ -169,6 +169,7 @@
 				DesignSystem/SharedAccent.swift,
 				Modules/AngleCalculator.swift,
 				Modules/AppName.swift,
+				Modules/DialDragTracker.swift,
 				Modules/ring.swift,
 				Modules/ThemeManager.swift,
 				Modules/TimerEngine.swift,

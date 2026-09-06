@@ -26,23 +26,17 @@ struct ClipClock: View {
     /// 사라질 땐 뚝 끊지 않고 녹여서 — 들어올 땐 빠르게, 나갈 땐 천천히
     private static let dissolveDuration: Double = 0.35
 
-    // 다이얼 드래그
+    // 다이얼 드래그 — 각도 산술은 `DialDragTracker` 가 메인 앱과 똑같이 처리한다
     @State private var showDragTooltip = false
     @State private var dragTooltipLingerTask: Task<Void, Never>?
-    @State private var isDraggingMain = false
-    @State private var mainFingerAngle: Double = 0
-    @State private var mainGrabDelta: Double = 0
+    @State private var mainDrag = DialDragTracker()
 
     // 종 노브 드래그
     @State private var draggingAlertOffset: Int?
     @State private var alertDragAngle: Double = 0
     @State private var lingeringAlertOffset: Int?
     @State private var alertLingerTask: Task<Void, Never>?
-
-    /// 자르지 않은 손가락 각도 — 종이 끝에 걸려도 손가락은 계속 따라가야 튀지 않는다
-    @State private var alertFingerAngle: Double = 0
-    /// 잡은 순간 종과 손가락이 어긋나 있던 만큼. 이걸 유지해야 집는 순간 종이 손끝으로 순간이동하지 않는다
-    @State private var alertGrabDelta: Double = 0
+    @State private var alertDrag = DialDragTracker()
 
     /// 다이얼 중심을 알아야 각도를 계산할 수 있어, 회전에 휘둘리지 않는 고정 좌표계를 따로 둔다
     private static let dialSpace = "clip.dial"
@@ -192,22 +186,20 @@ struct ClipClock: View {
                 showDragTooltip = true
                 dragTooltipLingerTask?.cancel()
 
-                if !isDraggingMain {
-                    isDraggingMain = true
-                    // 손가락은 핸들 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
-                    let grabbed = TimeMapper.ringAngle(at: value.startLocation, center: dialCenter)
-                    mainFingerAngle = grabbed
-                    mainGrabDelta = viewModel.mainAngle - grabbed
+                if !mainDrag.isActive {
+                    mainDrag.begin(at: value.startLocation,
+                                   center: dialCenter,
+                                   knobAngle: viewModel.mainAngle)
                 }
 
-                let finger = TimeMapper.ringAngle(at: value.location, center: dialCenter)
-                mainFingerAngle = TimeMapper.unwrappedAngle(finger, continuing: mainFingerAngle)
-                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
-                let angle = max(0, min(mainFingerAngle + mainGrabDelta, TimeMapper.maxAngle))
-                viewModel.updateMainAngle(angle)
+                viewModel.updateMainAngle(
+                    mainDrag.update(to: value.location,
+                                    center: dialCenter,
+                                    maxAngle: TimeMapper.maxAngle)
+                )
             }
             .onEnded { _ in
-                isDraggingMain = false
+                mainDrag.end()
                 // 손을 놓은 뒤에도 잠시 유지
                 dragTooltipLingerTask = Task {
                     try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
@@ -320,23 +312,24 @@ struct ClipClock: View {
             .onChanged { value in
                 if draggingAlertOffset != offsetSec {
                     draggingAlertOffset = offsetSec
-                    // 손가락은 종 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
-                    let grabbed = TimeMapper.ringAngle(at: value.startLocation, center: dialCenter)
-                    alertFingerAngle = grabbed
-                    alertGrabDelta = Double(offsetSec) / TimeMapper.secondsPerDegree - grabbed
+                    alertDrag.begin(
+                        at: value.startLocation,
+                        center: dialCenter,
+                        knobAngle: Double(offsetSec) / TimeMapper.secondsPerDegree
+                    )
                 }
                 alertLingerTask?.cancel()
                 lingeringAlertOffset = nil
 
-                let finger = TimeMapper.ringAngle(at: value.location, center: dialCenter)
-                alertFingerAngle = TimeMapper.unwrappedAngle(finger, continuing: alertFingerAngle)
-
-                // 알림은 총 시간보다 앞이어야 의미가 있다 (메인 앱과 같은 10초 여유)
-                let maxAngle = Double(viewModel.totalSeconds - 10) / TimeMapper.secondsPerDegree
-                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
-                alertDragAngle = max(0, min(alertFingerAngle + alertGrabDelta, max(0, maxAngle)))
+                alertDragAngle = alertDrag.update(
+                    to: value.location,
+                    center: dialCenter,
+                    // 알림은 총 시간보다 앞이어야 의미가 있다 (메인 앱과 같은 10초 여유)
+                    maxAngle: DialDragTracker.maxAlertAngle(totalSeconds: viewModel.totalSeconds)
+                )
             }
             .onEnded { _ in
+                alertDrag.end()
                 guard let dragged = draggingAlertOffset else { return }
                 let newSec = TimeMapper.angleToSeconds(from: alertDragAngle)
                 let keeps = newSec > 0 && newSec < viewModel.totalSeconds

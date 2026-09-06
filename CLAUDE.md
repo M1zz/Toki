@@ -936,9 +936,12 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   쓰이지 않게 된 문구(`onboarding_*_1`~`6`)는 카탈로그에서 제거했다.
 
 ### 알림 문구는 알림을 켜는 자리에서 쓴다
-"울릴 때 뭐라고 할까요"는 **알림 시트(`PrealertSettingsView`)** 안에, 켜 둔 알림 목록 바로 아래
-있다. 설정 > Messages(`NotificationMessageSettingView`)에도 같은 값이 있지만, 거기까지 찾아가는
-사람은 없다 — **문구가 필요하다고 느끼는 순간은 알림을 켤 때다.**
+⚠️ **알림 시트(`PrealertSettingsView`)는 삭제됐다(2026-09-06).** 어느 화면에서도 열리지 않는
+죽은 파일이었다 — 이 문서만 살아 있는 기능처럼 적고 있었다. 지금 문구를 고치는 곳은
+설정 > Messages(`NotificationMessageSettingView`) **하나뿐이다.**
+
+⚠️ 원래 의도는 **문구가 필요하다고 느끼는 순간은 알림을 켤 때**라는 것이었다. 설정 깊숙한 곳
+한 군데만 남은 지금은 그 자리를 아무도 찾지 못한다 — 되살린다면 알림을 켜는 자리에 붙일 것.
 
 - 두 화면은 같은 값(`prealertMessages` / `finishMessage`)을 본다. 한쪽만 고치지 말 것.
 - 빈칸의 placeholder 는 **실제로 나갈 기본 문구**여야 한다(`Timer.getPrealertMessage` 와 같은 말).
@@ -964,6 +967,11 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 ### 다이얼 드래그 (튐 방지)
 흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
+
+⚠️ **이 산술은 `Shared/Modules/DialDragTracker.swift` 한 곳에만 있습니다.**
+메인 앱(`TimerMainView` 흰 핸들·종 노브)과 App Clip(`ClipClock` 둘)이 **같은 것**을 씁니다 —
+예전에는 같은 모양이 네 벌 복사돼 있어서, 한 곳만 고쳐 놓고 고쳤다고 믿기 쉬웠습니다.
+새로 다이얼을 만들 때도 직접 계산하지 말고 이걸 쓰세요. 테스트: `DialDragTrackerTests` (8개)
 
 - `TimeMapper.ringAngle(at:center:)` — 고정 좌표계 좌표 → 링 각도(12시 = 0°, 시계 방향)
 - `TimeMapper.unwrappedAngle(_:continuing:)` — 359° → 1° 를 +2° 로 이어 붙임 (두 바퀴째까지)
