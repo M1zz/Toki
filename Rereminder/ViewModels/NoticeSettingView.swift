@@ -494,6 +494,38 @@ struct NoticeSettingView: View {
                 }
             }
 
+            // ⚠️ **피드백은 Help 안에 두지 말 것.** 예전에는 "How to Use" 밑 여섯 번째 줄에
+            //    묻혀 있었는데, 그 섹션은 부제까지 "첫 실행 안내가 전부 여기 있습니다"라
+            //    **사용법 문서로 읽힌다.** 불만이 있는 사람은 도움말을 열지 않는다.
+            //    통계는 어디서 떨어지는지까지만 말해 주고, 왜 그런지는 이 줄로만 들어온다.
+            Section(header: Text("Feedback"),
+                    footer: Text("The developer reads every message. Tell us what you need or what felt off.")) {
+                // CloudKit 직접 제출 (메일 앱 불필요) — 실패 시 FeedbackView 내부에서 이메일 폴백
+                Button {
+                    showFeedback = true
+                } label: {
+                    HStack {
+                        Label("Send Feedback", systemImage: "envelope.fill")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
+                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
+                    HStack {
+                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
             Section(header: Text("Help"), footer: Text("Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri.")) {
                 Button {
                     showOnboarding = true
@@ -560,34 +592,9 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
-                // CloudKit 직접 제출 (메일 앱 불필요) — 실패 시 FeedbackView 내부에서 이메일 폴백
-                Button {
-                    showFeedback = true
-                } label: {
-                    HStack {
-                        Label("Send Feedback", systemImage: "envelope.fill")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
                 // 개발자 전용 — 버전 행 7번 탭으로 노출
                 if masterModeEnabled {
                     developerLinks
-                }
-
-                // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
-                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
-                    HStack {
-                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
-                        Spacer()
-                        Image(systemName: "arrow.up.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
                 }
 
                 // Test Mode일 때만 표시

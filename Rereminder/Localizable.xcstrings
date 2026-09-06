@@ -2045,6 +2045,22 @@
         }
       }
     },
+    "Feedback" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フィードバック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "의견 보내기"
+          }
+        }
+      }
+    },
     "Feedback Inbox (Developer)" : {
       "localizations" : {
         "ja" : {
@@ -7128,6 +7144,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "앱이 설정을 기억합니다 — 저장한 설정·마지막 타이머·세션 도구"
+          }
+        }
+      }
+    },
+    "The developer reads every message. Tell us what you need or what felt off." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いただいたメッセージは開発者がすべて読んでいます。必要なことや気になった点をお聞かせください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보내주신 말은 개발자가 하나도 빠짐없이 읽습니다. 필요한 것이나 불편했던 점을 알려 주세요."
           }
         }
       }
