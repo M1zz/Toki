@@ -1,76 +1,112 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "CFBundleDisplayName": {
-      "comment": "Bundle display name",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rereminder"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rereminder"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "두번알림"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두번알림"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         }
       }
     },
-    "CFBundleName": {
-      "comment": "Bundle name",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rereminder"
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rereminder"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "두번알림"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두번알림"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         }
       }
     },
-    "NSAlarmKitUsageDescription": {
-      "comment": "Shown when the app asks to schedule alarms (설정 > 알림 > 끝나면 알람으로 울리기)",
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rereminder uses alarms so the end of a timer can wake you even in Silent Mode."
+    "NSAlarmKitUsageDescription" : {
+      "comment" : "Shown when the app asks to schedule alarms (설정 > 알림 > 끝나면 알람으로 울리기)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder uses alarms so the end of a timer can wake you even in Silent Mode."
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "サイレントモードでもタイマーの終了に気づけるよう、アラームを使用します。"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サイレントモードでもタイマーの終了に気づけるよう、アラームを使用します。"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무음 모드에서도 타이머가 끝난 것을 알 수 있도록 알람을 사용합니다."
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무음 모드에서도 타이머가 끝난 것을 알 수 있도록 알람을 사용합니다."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder 使用闹钟，让计时结束时即使在静音模式下也能叫醒你。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder 使用鬧鐘，讓計時結束時即使在靜音模式下也能叫醒你。"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

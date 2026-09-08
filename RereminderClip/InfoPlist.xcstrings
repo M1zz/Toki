@@ -21,6 +21,18 @@
             "state" : "translated",
             "value" : "두번알림"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
         }
       }
     }
