@@ -128,10 +128,13 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"],
+        body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"],
+        body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"],
+        body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -141,9 +144,9 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) span[data-lang="en"] { display: inline; }
     </style>
 </head>
 <body>
@@ -157,6 +160,8 @@
             <div class="lang" role="group" aria-label="Language">
                 <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
                 <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+                <button type="button" data-set-lang="zh-Hans" aria-pressed="false">简体</button>
+                <button type="button" data-set-lang="zh-Hant" aria-pressed="false">繁體</button>
             </div>
         </div>
     </div>
@@ -168,7 +173,7 @@
 <div data-lang="en">
     <h1>Support</h1>
     <p class="lede">Rereminder is made by one person. Write to me and you are writing to the developer — not a ticket queue.</p>
-    <p class="updated">Last updated: August 30, 2026 &middot; App version 2.2.1</p>
+    <p class="updated">Last updated: September 9, 2026 &middot; App version 2.2.5</p>
 
     <h2>Get in touch</h2>
     <div class="contact-grid">
@@ -255,22 +260,22 @@
     <details>
         <summary>What does Pro actually include?</summary>
         <div class="body">
-            <p>Pro is a <strong>one-time purchase</strong>. The free version covers the everyday case; Pro is for people who design their time in segments.</p>
+            <p>Pro is a <strong>one-time purchase</strong>. What Pro sells is one sentence: <strong>the app remembers your setups.</strong></p>
             <p><strong>Free</strong></p>
             <ul>
-                <li><strong>Two pre-alerts</strong> on any timer &mdash; and when you hit that limit, the app gives you one more on the spot, once a day.</li>
-                <li><strong>Three saved templates.</strong></li>
-                <li>Every theme colour, custom alert messages, Live Activity, and the <strong>full Apple Watch app</strong>. None of that is paywalled.</li>
+                <li><strong>Unlimited pre-alerts.</strong> Put as many as you like on a timer &mdash; the thing this app exists for is not metered.</li>
+                <li>Every theme colour, custom alert messages, Live Activity, repeat-until-answered alerts, and the alarm ending.</li>
+                <li>The <strong>full Apple Watch app and Mac app</strong>. Neither is paywalled.</li>
             </ul>
             <p><strong>Pro</strong></p>
             <ul>
-                <li><strong>Unlimited pre-alerts</strong> &mdash; for a talk split into five segments rather than one heads-up.</li>
-                <li><strong>Unlimited templates.</strong></li>
-                <li><strong>Presentation mode</strong> &mdash; name each section ("intro / demo / Q&amp;A") and keep a script per section that unfolds when that section starts.</li>
+                <li><strong>Templates</strong> &mdash; save a setup and bring it back in one tap, as many as you want.</li>
+                <li><strong>Your last setup comes back</strong> when you reopen the app.</li>
+                <li><strong>Session mode</strong> &mdash; name each section ("intro / demo / Q&amp;A") and keep a script per section that unfolds when that section starts.</li>
                 <li><strong>Overtime</strong> &mdash; the clock keeps counting past 00:00 so you know how far over you ran.</li>
                 <li><strong>History and stats</strong> &mdash; a record of the sessions you have run.</li>
             </ul>
-            <p>Each Pro feature can be <strong>tried five times</strong> before you decide, so you can see what it does with your own timers first.</p>
+            <p>Templates you already saved are never deleted. If you do not have Pro they stay on screen, locked, and unlock again the moment you buy.</p>
         </div>
     </details>
 
@@ -293,7 +298,7 @@
         <summary>Which languages and devices are supported?</summary>
         <div class="body">
             <table>
-                <tr><td>Languages</td><td>English, Korean, Japanese</td></tr>
+                <tr><td>Languages</td><td>English, Korean, Japanese, Simplified Chinese, Traditional Chinese</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 or later</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 or later</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 or later</td></tr>
@@ -318,7 +323,7 @@
 <div data-lang="ko">
     <h1>지원</h1>
     <p class="lede">Rereminder는 한 사람이 만들고 있습니다. 문의를 보내시면 상담 창구가 아니라 개발자에게 바로 닿습니다.</p>
-    <p class="updated">최종 수정: 2026년 8월 30일 &middot; 앱 버전 2.2.1</p>
+    <p class="updated">최종 수정: 2026년 9월 9일 &middot; 앱 버전 2.2.5</p>
 
     <h2>문의하기</h2>
     <div class="contact-grid">
@@ -405,22 +410,22 @@
     <details>
         <summary>Pro에는 무엇이 들어 있나요?</summary>
         <div class="body">
-            <p>Pro는 <strong>한 번만 결제</strong>하는 방식입니다. 무료로도 일상적인 쓰임은 충분하고, Pro는 시간을 구간으로 설계하시는 분들을 위한 것입니다.</p>
+            <p>Pro는 <strong>한 번만 결제</strong>하는 방식입니다. Pro가 파는 것은 한 문장입니다 &mdash; <strong>앱이 당신의 설정을 기억합니다.</strong></p>
             <p><strong>무료</strong></p>
             <ul>
-                <li>타이머마다 <strong>예비 알림 2개.</strong> 한도에 걸리시면 그 자리에서 하루 한 번 한 개를 더 내어 드립니다.</li>
-                <li><strong>템플릿 3개 저장.</strong></li>
-                <li>모든 테마 색, 직접 쓰는 알림 문구, Live Activity, 그리고 <strong>Apple Watch 앱 전체.</strong> 어느 것도 잠겨 있지 않습니다.</li>
+                <li><strong>예비 알림 무제한.</strong> 한 타이머에 몇 개든 두실 수 있습니다. 이 앱이 존재하는 이유를 개수로 세지 않습니다.</li>
+                <li>모든 테마 색, 직접 쓰는 알림 문구, Live Activity, 확인할 때까지 알리기, 끝나면 알람으로 울리기.</li>
+                <li><strong>Apple Watch 앱과 Mac 앱 전체.</strong> 둘 다 잠겨 있지 않습니다.</li>
             </ul>
             <p><strong>Pro</strong></p>
             <ul>
-                <li><strong>예비 알림 무제한</strong> &mdash; 한 번 알려 주는 것이 아니라 발표를 다섯 구간으로 나누시는 분들을 위한 것입니다.</li>
-                <li><strong>템플릿 무제한.</strong></li>
-                <li><strong>발표 모드</strong> &mdash; 구간마다 이름("도입 / 시연 / 질의응답")과 대본을 적어 두면, 그 구간 차례에 펼쳐집니다.</li>
+                <li><strong>템플릿</strong> &mdash; 설정을 저장해 두고 한 번에 불러옵니다. 개수 제한은 없습니다.</li>
+                <li><strong>마지막에 쓰던 설정</strong>이 앱을 다시 열 때 그대로 돌아옵니다.</li>
+                <li><strong>세션 모드</strong> &mdash; 구간마다 이름("도입 / 시연 / 질의응답")과 대본을 적어 두면, 그 구간 차례에 펼쳐집니다.</li>
                 <li><strong>오버타임</strong> &mdash; 00:00에서 멈추지 않고 얼마나 넘겼는지 계속 셉니다.</li>
                 <li><strong>기록과 통계</strong> &mdash; 지금까지 진행한 세션이 남습니다.</li>
             </ul>
-            <p>Pro 기능은 각각 <strong>다섯 번까지 미리 써 보실 수 있습니다.</strong> 내 타이머로 무엇이 달라지는지 먼저 보고 결정하시면 됩니다.</p>
+            <p>이미 저장하신 템플릿은 사라지지 않습니다. Pro가 없으면 잠긴 채로 화면에 남아 있다가, 결제하시는 순간 다시 열립니다.</p>
         </div>
     </details>
 
@@ -443,7 +448,7 @@
         <summary>지원 언어와 기기가 어떻게 되나요?</summary>
         <div class="body">
             <table>
-                <tr><td>언어</td><td>한국어, English, 日本語</td></tr>
+                <tr><td>언어</td><td>한국어, English, 日本語, 简体中文, 繁體中文</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 이상</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 이상</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 이상</td></tr>
@@ -464,6 +469,306 @@
     <p><a href="mailto:leeo@kakao.com">leeo@kakao.com</a>으로 보내 주세요. 무엇이 잘못됐는지뿐 아니라 <strong>무엇을 하려고 하셨는지</strong>도 함께 적어 주시면 답을 드리기가 훨씬 쉽습니다.</p>
 </div>
 
+<!-- ============================= 简体中文 ============================= -->
+<div data-lang="zh-Hans">
+    <h1>支持</h1>
+    <p class="lede">Rereminder 由一个人开发。你写信过来，就是直接写给开发者，不是工单系统。</p>
+    <p class="updated">最后更新：2026 年 9 月 9 日 &middot; App 版本 2.2.6</p>
+
+    <h2>联系方式</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>电子邮件</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>最适合报告故障、申请退款，以及任何需要附截图的事情。</p>
+        </div>
+        <div class="card">
+            <h3>在 App 内</h3>
+            <p><span class="ui">设置 &rsaquo; 意见反馈 &rsaquo; 发送反馈</span></p>
+            <p>直接进我的收件箱。不需要邮件 App，只要登录 iCloud。</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>私信随时开放，适合简短的问题。</p>
+        </div>
+        <div class="card">
+            <h3>故障与功能建议</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>公开的，别人也能找到同一个答案。</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>我通常在 2&ndash;3 天内回复。</strong>如果超过一周还没有回音，就当作消息丢了，请再发一次 &mdash; 我宁愿读两遍，也不愿一遍都没读到。</p>
+    </div>
+
+    <h3>报告故障时请附上</h3>
+    <ul>
+        <li><strong>App 版本</strong> &mdash; <span class="ui">设置 &rsaquo; 信息</span> 最下面能看到。</li>
+        <li><strong>设备和系统版本</strong> &mdash; 例如 iPhone 15 Pro、iOS 26.1。如果问题出在手表上，请写明 Apple Watch 型号。</li>
+        <li><strong>你期待发生什么，实际发生了什么。</strong>"5 分钟的提醒一直没响"比"通知坏了"能告诉我多得多。</li>
+        <li><strong>是每次都这样，还是只发生过一次。</strong></li>
+    </ul>
+
+    <h2>常见问题</h2>
+
+    <details>
+        <summary>提醒没有响</summary>
+        <div class="body">
+            <p>Rereminder 用的是<strong>本地通知</strong>，所以这几乎总是权限或专注模式的问题。请按这个顺序检查：</p>
+            <ol>
+                <li><strong>通知权限。</strong>打开 App 里的 <span class="ui">设置 &rsaquo; 通知方式</span> &mdash; 那里会显示当前状态，并可以直接请求权限或跳到系统设置。</li>
+                <li><strong>专注模式 / 勿扰模式。</strong>如果开着专注模式，请在系统 <span class="ui">设置 &rsaquo; 专注模式</span> 里把 Rereminder 加进允许的 App。</li>
+                <li><strong>静音开关和音量。</strong>静音模式会压掉声音，但振动仍然会传过来。</li>
+                <li><strong>定时推送摘要。</strong>系统 <span class="ui">设置 &rsaquo; 通知 &rsaquo; 定时推送摘要</span> 会把通知攒到指定时间才送达。Rereminder 不应该在里面。</li>
+            </ol>
+            <p>如果这四项都正常还是不响，请告诉我计时的长度和提醒放在哪几个位置 &mdash; 这个组合才是我复现问题需要的。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch 不同步</summary>
+        <div class="body">
+            <p>打开 App 里的 <span class="ui">设置 &rsaquo; 我的设备</span>。Apple Watch 旁边的状态会告诉你缺了哪一步，点一下就会打开针对当前状态的说明。</p>
+            <ol>
+                <li>手表已经和这台 iPhone <strong>配对</strong>。</li>
+                <li><strong>手表上装了 Rereminder。</strong>在 iPhone 上打开"Watch"App，找到 Rereminder，没有的话就安装。</li>
+                <li><strong>在手表上打开过一次 Rereminder。</strong>刚装好的手表 App 还从没运行过，第一次同步需要它启动过。</li>
+            </ol>
+            <p>手表 App 退到后台，计时状态一样会同步过去，不用一直开着。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>App 明明开着，Mac 却显示"未连接"</summary>
+        <div class="body">
+            <p>这里的"已连接"是指<strong>大约最近 10 分钟内那台 Mac 上运行过这个 App</strong>，不是一条实时连接。每台设备每五分钟在你自己的 iCloud 里留一个标记，而 iCloud 无法唤醒休眠中的 App，所以刚唤醒的 Mac 可能要过几分钟才出现。</p>
+            <p>如果一直不出现：两台设备必须登录<strong>同一个 iCloud 账户</strong>并<strong>打开 iCloud 云盘</strong>。<span class="ui">设置 &rsaquo; 我的设备</span> 里有"重新检查"按钮，可以立即重读一次。</p>
+            <p>Mac 版需要 <strong>macOS 26 或更新版本</strong>。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>买了 Pro 但没有生效</summary>
+        <div class="body">
+            <p>打开 Pro 页面，点<strong>恢复购买</strong>。购买记录绑定在下单的那个 Apple 账户上，所以请确认你登录的是同一个账户 &mdash; 不是家人的，也不是另一个地区的账户。</p>
+            <p>Pro 是<strong>一次性买断</strong>，不是订阅，也不会过期，所以重装 App 或换新设备之后依然有效。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro 到底包含什么？</summary>
+        <div class="body">
+            <p>Pro 是<strong>一次性买断</strong>。Pro 卖的是一句话：<strong>App 会记住你的设置。</strong></p>
+            <p><strong>免费</strong></p>
+            <ul>
+                <li><strong>提前提醒不限个数。</strong>一个计时想放几个就放几个 &mdash; 这个 App 存在的理由，不按个数收费。</li>
+                <li>所有主题色、自定义提醒文案、实时活动、确认前持续提醒，以及结束时用闹钟响铃。</li>
+                <li><strong>完整的 Apple Watch App 和 Mac App。</strong>两个都没有上锁。</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>模板</strong> &mdash; 把一套设置存下来，下次点一下就调回，数量不限。</li>
+                <li><strong>上次用的设置</strong>会在重新打开 App 时回来。</li>
+                <li><strong>分段模式</strong> &mdash; 给每一段起名（"开场 / 演示 / 问答"），并为每一段写讲稿，轮到那一段时展开。</li>
+                <li><strong>超时</strong> &mdash; 过了 00:00 继续计数，让你知道超了多久。</li>
+                <li><strong>记录与统计</strong> &mdash; 留下你跑过的每一场。</li>
+            </ul>
+            <p>已经保存的模板永远不会被删除。没有 Pro 时它们会锁着留在屏幕上，购买的那一刻重新解锁。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>我想退款</summary>
+        <div class="body">
+            <p>退款由 Apple 处理，不经过我 &mdash; 我看不到你的支付信息，也无法直接退款。请用下单的那个 Apple 账户到 <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> 申请。</p>
+            <p>如果原因是哪里坏了，也请顺便告诉我。退款只是关掉了你这一单，下一个人还会遇到同样的问题。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>可以不安装先试试吗？</summary>
+        <div class="body">
+            <p>可以。用 iPhone 打开 <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a>，App Clip 会直接把计时器跑起来，不用去 App Store。表盘和提醒都在；模板、分段模式和手表 App 在完整版里。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>支持哪些语言和设备？</summary>
+        <div class="body">
+            <table>
+                <tr><td>语言</td><td>简体中文、繁體中文、English、한국어、日本語</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
+                <tr><td>iPad</td><td>暂不支持</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>怎么删除我的数据？</summary>
+        <div class="body">
+            <p>你创建的一切 &mdash; 计时器、模板、分段名称、讲稿、历史记录 &mdash; 都存在你的设备上。<strong>删除 App 就会一并删除。</strong></p>
+            <p>App 发送的匿名使用次数在<a href="privacy.html">隐私政策</a>里有完整说明，包括删除 App 之后哪些会停止。</p>
+        </div>
+    </details>
+
+    <h2>还是没解决？</h2>
+    <p>写信到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。请告诉我你本来想做什么 &mdash; 而不只是哪里出错了 &mdash; 我会回复你。</p>
+</div>
+
+<!-- ============================= 繁體中文 ============================= -->
+<div data-lang="zh-Hant">
+    <h1>支援</h1>
+    <p class="lede">Rereminder 由一個人開發。你寫信過來，就是直接寫給開發者，不是工單系統。</p>
+    <p class="updated">最後更新：2026 年 9 月 9 日 &middot; App 版本 2.2.6</p>
+
+    <h2>聯絡方式</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>電子郵件</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>最適合回報問題、申請退款，以及任何需要附截圖的事情。</p>
+        </div>
+        <div class="card">
+            <h3>在 App 內</h3>
+            <p><span class="ui">設定 &rsaquo; 意見回饋 &rsaquo; 傳送意見</span></p>
+            <p>直接進我的收件匣。不需要郵件 App，只要登入 iCloud。</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>私訊隨時開放，適合簡短的問題。</p>
+        </div>
+        <div class="card">
+            <h3>問題與功能建議</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>公開的，其他人也能找到同一個答案。</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>我通常在 2&ndash;3 天內回覆。</strong>如果超過一週還沒有回音，就當作訊息弄丟了，請再寄一次 &mdash; 我寧願讀兩遍，也不願一遍都沒讀到。</p>
+    </div>
+
+    <h3>回報問題時請附上</h3>
+    <ul>
+        <li><strong>App 版本</strong> &mdash; <span class="ui">設定 &rsaquo; 資訊</span> 最下面看得到。</li>
+        <li><strong>裝置和系統版本</strong> &mdash; 例如 iPhone 15 Pro、iOS 26.1。如果問題出在手錶上，請寫明 Apple Watch 型號。</li>
+        <li><strong>你預期會發生什麼，實際發生了什麼。</strong>「5 分鐘的提醒一直沒響」比「通知壞了」能告訴我多得多。</li>
+        <li><strong>是每次都這樣，還是只發生過一次。</strong></li>
+    </ul>
+
+    <h2>常見問題</h2>
+
+    <details>
+        <summary>提醒沒有響</summary>
+        <div class="body">
+            <p>Rereminder 用的是<strong>本地通知</strong>，所以這幾乎都是權限或專注模式的問題。請照這個順序檢查：</p>
+            <ol>
+                <li><strong>通知權限。</strong>打開 App 裡的 <span class="ui">設定 &rsaquo; 通知方式</span> &mdash; 那裡會顯示目前狀態，也可以直接要求權限或跳到系統設定。</li>
+                <li><strong>專注模式 / 勿擾模式。</strong>如果開著專注模式，請在系統 <span class="ui">設定 &rsaquo; 專注模式</span> 裡把 Rereminder 加進允許的 App。</li>
+                <li><strong>靜音開關和音量。</strong>靜音模式會壓掉聲音，但震動還是會傳過來。</li>
+                <li><strong>排定摘要。</strong>系統 <span class="ui">設定 &rsaquo; 通知 &rsaquo; 排定摘要</span> 會把通知累積到指定時間才送達。Rereminder 不應該在裡面。</li>
+            </ol>
+            <p>如果這四項都正常還是不響，請告訴我計時的長度和提醒放在哪幾個位置 &mdash; 這個組合才是我重現問題需要的。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch 沒有同步</summary>
+        <div class="body">
+            <p>打開 App 裡的 <span class="ui">設定 &rsaquo; 我的裝置</span>。Apple Watch 旁邊的狀態會告訴你缺了哪一步，點一下就會打開針對目前狀態的說明。</p>
+            <ol>
+                <li>手錶已經和這台 iPhone <strong>配對</strong>。</li>
+                <li><strong>手錶上裝了 Rereminder。</strong>在 iPhone 上開啟「Watch」App，找到 Rereminder，沒有的話就安裝。</li>
+                <li><strong>在手錶上開啟過一次 Rereminder。</strong>剛裝好的手錶 App 還沒執行過，第一次同步需要它啟動過。</li>
+            </ol>
+            <p>手錶 App 退到背景，計時狀態一樣會同步過去，不用一直開著。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>App 明明開著，Mac 卻顯示「未連線」</summary>
+        <div class="body">
+            <p>這裡的「已連線」是指<strong>大約最近 10 分鐘內那台 Mac 上執行過這個 App</strong>，不是一條即時連線。每台裝置每五分鐘在你自己的 iCloud 裡留一個標記，而 iCloud 無法喚醒睡眠中的 App，所以剛喚醒的 Mac 可能要過幾分鐘才出現。</p>
+            <p>如果一直不出現：兩台裝置必須登入<strong>同一個 iCloud 帳號</strong>並<strong>開啟 iCloud 雲碟</strong>。<span class="ui">設定 &rsaquo; 我的裝置</span> 裡有「再次檢查」按鈕，可以立刻重讀一次。</p>
+            <p>Mac 版需要 <strong>macOS 26 或更新版本</strong>。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>買了 Pro 但沒有生效</summary>
+        <div class="body">
+            <p>打開 Pro 頁面，點<strong>回復購買</strong>。購買記錄綁在下單的那個 Apple 帳號上，所以請確認你登入的是同一個帳號 &mdash; 不是家人的，也不是另一個地區的帳號。</p>
+            <p>Pro 是<strong>一次買斷</strong>，不是訂閱，也不會過期，所以重新安裝 App 或換新裝置之後依然有效。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro 到底包含什麼？</summary>
+        <div class="body">
+            <p>Pro 是<strong>一次買斷</strong>。Pro 賣的是一句話：<strong>App 會記住你的設定。</strong></p>
+            <p><strong>免費</strong></p>
+            <ul>
+                <li><strong>提前提醒不限個數。</strong>一次計時想放幾個就放幾個 &mdash; 這個 App 存在的理由，不按個數收費。</li>
+                <li>所有主題色、自訂提醒文案、即時動態、確認前持續提醒，以及結束時用鬧鐘響鈴。</li>
+                <li><strong>完整的 Apple Watch App 和 Mac App。</strong>兩個都沒有上鎖。</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>範本</strong> &mdash; 把一套設定存下來，下次點一下就叫回，數量不限。</li>
+                <li><strong>上次用的設定</strong>會在重新開啟 App 時回來。</li>
+                <li><strong>分段模式</strong> &mdash; 幫每一段命名（「開場 / 示範 / 問答」），並為每一段寫講稿，輪到那一段時展開。</li>
+                <li><strong>超時</strong> &mdash; 過了 00:00 繼續計數，讓你知道超了多久。</li>
+                <li><strong>記錄與統計</strong> &mdash; 留下你跑過的每一場。</li>
+            </ul>
+            <p>已經儲存的範本永遠不會被刪除。沒有 Pro 時它們會鎖著留在螢幕上，購買的那一刻重新解鎖。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>我想退款</summary>
+        <div class="body">
+            <p>退款由 Apple 處理，不經過我 &mdash; 我看不到你的付款資訊，也無法直接退款。請用下單的那個 Apple 帳號到 <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> 申請。</p>
+            <p>如果原因是哪裡壞了，也請順便告訴我。退款只是關掉了你這一單，下一個人還會遇到同樣的問題。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>可以不安裝先試試嗎？</summary>
+        <div class="body">
+            <p>可以。用 iPhone 開啟 <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a>，App Clip 會直接把計時器跑起來，不用去 App Store。錶盤和提醒都在；範本、分段模式和手錶 App 在完整版裡。</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>支援哪些語言和裝置？</summary>
+        <div class="body">
+            <table>
+                <tr><td>語言</td><td>繁體中文、简体中文、English、한국어、日本語</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
+                <tr><td>iPad</td><td>暫不支援</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>怎麼刪除我的資料？</summary>
+        <div class="body">
+            <p>你建立的一切 &mdash; 計時器、範本、分段名稱、講稿、歷史記錄 &mdash; 都存在你的裝置上。<strong>刪除 App 就會一併刪除。</strong></p>
+            <p>App 傳送的匿名使用次數在<a href="privacy.html">隱私權政策</a>裡有完整說明，包括刪除 App 之後哪些會停止。</p>
+        </div>
+    </details>
+
+    <h2>還是沒解決？</h2>
+    <p>寫信到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。請告訴我你本來想做什麼 &mdash; 而不只是哪裡出錯了 &mdash; 我會回覆你。</p>
+</div>
+
 </div>
 
 <footer>
@@ -479,8 +784,9 @@
 <script>
 (function () {
     var KEY = 'rereminder-lang';
+    var LANGS = ['en', 'ko', 'zh-Hans', 'zh-Hant'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-zh-Hans', 'lang-zh-Hant');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
         var buttons = document.querySelectorAll('[data-set-lang]');
@@ -495,13 +801,18 @@
         var saved = null;
         // 'lang' 은 index.html 이 예전에 쓰던 키다 — 이미 고른 사람의 선택을 잇는다.
         try { saved = localStorage.getItem(KEY) || localStorage.getItem('lang'); } catch (e) {}
-        if (saved === 'ko' || saved === 'en') return saved;
+        if (LANGS.indexOf(saved) >= 0) return saved;
         // navigator.language 하나만 보면 "영어를 1순위로 두고 한국어도 쓰는" 기기를 놓친다.
         var tags = (navigator.languages && navigator.languages.length)
             ? navigator.languages
             : [navigator.language || navigator.userLanguage || ''];
         for (var i = 0; i < tags.length; i++) {
-            if (String(tags[i]).toLowerCase().indexOf('ko') === 0) return 'ko';
+            var tag = String(tags[i]).toLowerCase();
+            if (tag.indexOf('ko') === 0) return 'ko';
+            // 번체는 대만·홍콩·마카오. 그 밖의 zh 는 간체로 본다(zh 만 온 경우 포함).
+            if (tag.indexOf('zh') === 0) {
+                return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
+            }
         }
         return 'en';
     }

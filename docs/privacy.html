@@ -128,10 +128,13 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"],
+        body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"],
+        body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"],
+        body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -141,9 +144,9 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) span[data-lang="en"] { display: inline; }
     </style>
 </head>
 <body>
@@ -157,6 +160,8 @@
             <div class="lang" role="group" aria-label="Language">
                 <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
                 <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+                <button type="button" data-set-lang="zh-Hans" aria-pressed="false">简体</button>
+                <button type="button" data-set-lang="zh-Hant" aria-pressed="false">繁體</button>
             </div>
         </div>
     </div>
@@ -168,7 +173,7 @@
 <div data-lang="en">
     <h1>Privacy Policy</h1>
     <p class="lede">Rereminder is developed by Hyunho Lee. This page says exactly what leaves your phone and what does not.</p>
-    <p class="updated">Last updated: August 30, 2026 &middot; Applies to app version 2.2.1</p>
+    <p class="updated">Last updated: September 9, 2026 &middot; Applies to app version 2.2.6</p>
 
     <h2>The short version</h2>
     <div class="note">
@@ -209,7 +214,7 @@
     <ul>
         <li><strong>Your message</strong> and the category you picked.</li>
         <li><strong>A name and a reply-to email &mdash; both optional and both blank by default.</strong> Fill them in only if you want an answer back. They are used to reply to you and for nothing else.</li>
-        <li><strong>One device line</strong> &mdash; app version, kind of device, OS version, like <code>App 2.2.1 | iPhone | iOS 26.1</code>. That is the <em>kind</em> of device, not <em>which</em> device; nothing in it is unique to you. The form shows you this exact line before you send.</li>
+        <li><strong>One device line</strong> &mdash; app version, kind of device, OS version, like <code>App 2.2.6 | iPhone | iOS 26.1</code>. That is the <em>kind</em> of device, not <em>which</em> device; nothing in it is unique to you. The form shows you this exact line before you send.</li>
         <li>Your language setting (for example <code>ko_KR</code>) and platform.</li>
     </ul>
     <p>Nothing leaves that screen unless you press send. Tapping 👍 on the "enjoying the app?" prompt opens the App Store review sheet and sends me nothing; 👎 just opens this same feedback form.</p>
@@ -262,7 +267,7 @@
 <div data-lang="ko">
     <h1>개인정보 처리방침</h1>
     <p class="lede">Rereminder는 이현호가 개발합니다. 이 페이지에는 무엇이 기기 밖으로 나가고 무엇이 나가지 않는지를 그대로 적었습니다.</p>
-    <p class="updated">최종 수정: 2026년 8월 30일 &middot; 앱 버전 2.2.1 기준</p>
+    <p class="updated">최종 수정: 2026년 9월 9일 &middot; 앱 버전 2.2.6 기준</p>
 
     <h2>요약</h2>
     <div class="note">
@@ -303,7 +308,7 @@
     <ul>
         <li><strong>작성하신 내용</strong>과 고르신 분류.</li>
         <li><strong>이름과 회신 받을 이메일 &mdash; 둘 다 선택 항목이고 기본은 빈칸입니다.</strong> 답을 받고 싶으실 때만 적어 주세요. 답장에만 쓰고 다른 데는 쓰지 않습니다.</li>
-        <li><strong>기기 줄 한 줄</strong> &mdash; 앱 버전, 기기 종류, OS 버전입니다. <code>App 2.2.1 | iPhone | iOS 26.1</code> 같은 모양이고, <em>어떤 종류</em>의 기기인지일 뿐 <em>어느</em> 기기인지가 아닙니다. 여기에 사용자를 특정할 수 있는 값은 없습니다. 보내기 전에 화면에서 이 줄을 그대로 보여 드립니다.</li>
+        <li><strong>기기 줄 한 줄</strong> &mdash; 앱 버전, 기기 종류, OS 버전입니다. <code>App 2.2.6 | iPhone | iOS 26.1</code> 같은 모양이고, <em>어떤 종류</em>의 기기인지일 뿐 <em>어느</em> 기기인지가 아닙니다. 여기에 사용자를 특정할 수 있는 값은 없습니다. 보내기 전에 화면에서 이 줄을 그대로 보여 드립니다.</li>
         <li>언어 설정(예: <code>ko_KR</code>)과 플랫폼.</li>
     </ul>
     <p>보내기를 누르지 않으면 그 화면에서 나가는 것은 없습니다. "즐겁게 쓰고 계신가요?"에서 👍를 누르면 App Store 리뷰 창이 열릴 뿐 저에게 오는 것은 없고, 👎는 이 피드백 화면을 열어 줍니다.</p>
@@ -352,6 +357,194 @@
     <p>"그건 왜 필요한가요"를 포함해 무엇이든 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>으로 문의해 주세요. <a href="support.html">지원 페이지</a>도 함께 참고하실 수 있습니다.</p>
 </div>
 
+<!-- ============================= 简体中文 ============================= -->
+<div data-lang="zh-Hans">
+    <h1>隐私政策</h1>
+    <p class="lede">Rereminder 由 Hyunho Lee 开发。这一页会明确说明什么会离开你的手机，什么不会。</p>
+    <p class="updated">最后更新：2026 年 9 月 9 日 &middot; 适用于 App 版本 2.2.6</p>
+
+    <h2>一句话版本</h2>
+    <div class="note">
+        <p><strong>你写下的一切都留在你的手机上。</strong>计时器名称、提醒文案、分段标题、演讲讲稿、历史记录 &mdash; 没有任何一项会被送到别处。</p>
+        <p><strong>App 确实会向我发送匿名数字。</strong>像"启动了多少次计时""有多少跑到了最后"这样的次数，绑定在一个与你无关的随机 ID 上。我靠这些决定该修什么。下面有完整说明。</p>
+        <p><strong>没有广告、没有追踪器、没有第三方分析 SDK。</strong>不出售，也不与任何人共享。</p>
+    </div>
+
+    <h2>只留在你设备上的内容</h2>
+    <p>以下内容存在本地，<strong>绝不会传给我</strong>：</p>
+    <ul>
+        <li><strong>计时器设置</strong> &mdash; 时长、每个提醒放在哪里、自定义提醒文案。</li>
+        <li><strong>模板</strong> &mdash; 保存的设置和它们的名称。</li>
+        <li><strong>分段内容</strong> &mdash; 分段名称，以及你为每一段写的讲稿或备注。</li>
+        <li><strong>历史记录</strong> &mdash; 你跑过的每一场的记录。</li>
+        <li><strong>偏好设置</strong> &mdash; 主题色、声音与振动模式、你告诉 App 自己有哪些设备。</li>
+        <li><strong>购买状态</strong> &mdash; 是否拥有 Rereminder Pro，存放在 iOS 钥匙串中。</li>
+    </ul>
+    <p>删除 App 就会一并删除。</p>
+
+    <h2>App 会发送给我的内容</h2>
+    <p>全部进入<strong>我自己的一个 CloudKit 数据库</strong>（容器 <code>iCloud.com.Ysoup.FeedbackHub</code>）。没有别的服务器，也没有任何其他公司收到其中任何内容。</p>
+
+    <h3>1. 匿名使用次数</h3>
+    <p>每次安装一条记录，每天最多更新两次。它包含：</p>
+    <ul>
+        <li>一个 <strong>App 首次启动时自己生成的随机 ID</strong>。它不是你的 Apple 账户，不是设备标识符，也不与你的任何信息关联。删除 App，这个 ID 就没了；重装会生成一个全新且互不相连的 ID。</li>
+        <li>App 版本、平台（iPhone / Watch / Mac）、系统版本和语言设置。</li>
+        <li><strong>只有次数，别无其他</strong> &mdash; 启动、完成、取消的计时数；累计管理的分钟数；一次计时通常有几个提醒；保存和使用了多少模板；是否用过分段模式；是否用过手表；安装后经过的天数；最后一次活跃的时间。</li>
+        <li>两个是/否标记：是否购买了 Pro，以及是否授予了通知权限。</li>
+    </ul>
+
+    <h3>2. 匿名事件</h3>
+    <p>当发生值得记录的事情时 &mdash; App 被打开、计时被启动、付费页被展示 &mdash; App 会记下<strong>那个事件的名称</strong>，连同 App 版本、平台、同一个随机 ID 和一个时间戳。每个事件名<strong>最多每六小时记录一次</strong>，所以这些只能说明某件事<em>是否</em>发生，永远不能说明发生了多频繁。</p>
+
+    <h3>3. 你主动发送的反馈</h3>
+    <p>只有当你打开 <span class="ui">发送反馈</span> 并按下发送时才会发生。那条记录包含：</p>
+    <ul>
+        <li><strong>你写的内容</strong>和你选择的分类。</li>
+        <li><strong>一个称呼和一个回信邮箱 &mdash; 两者都是可选的，默认都是空的。</strong>只有想收到回复时才填。它们只用于回复你，不作他用。</li>
+        <li><strong>一行设备信息</strong> &mdash; App 版本、设备种类、系统版本，形如 <code>App 2.2.6 | iPhone | iOS 26.1</code>。那是设备的<em>种类</em>，不是<em>哪一台</em>；里面没有任何能指向你的值。发送前，表单会把这一行原样显示给你。</li>
+        <li>你的语言设置（例如 <code>zh_CN</code>）和平台。</li>
+    </ul>
+    <p>不按发送，就没有任何东西离开那个页面。在"用得还顺手吗"提示上点 👍 会打开 App Store 评分页，不会发给我任何东西；点 👎 只是打开同一个反馈表单。</p>
+
+    <h3>4. 崩溃与卡顿报告</h3>
+    <p>通过 <strong>Apple 的 MetricKit</strong> 收集，它在系统层面汇总崩溃与性能数据。这些内容包含调用栈和耗时，绝不包含你的计时内容。</p>
+
+    <div class="note">
+        <p><strong>有一点值得说明：</strong>当你的设备把上述任何内容写入 CloudKit 时，Apple 会给记录盖上一个不透明的、按 App 区分的 iCloud 标识符。它由 Apple 生成，每个 App 都不同，不是你的邮箱地址，我也无法用它联系你或在别处查到你。这是 CloudKit 的运作方式带来的副作用，不是 App 有意收集的东西。</p>
+    </div>
+
+    <h2>在任何情况下都不会发送的内容</h2>
+    <ul>
+        <li>计时器名称、提醒文案、分段标题、演讲讲稿 &mdash; <strong>你输入的任何文字。</strong></li>
+        <li>你的姓名或邮箱地址 &mdash; 除了上面反馈表单中那两个可选字段，那是你自己填的，也可以留空。</li>
+        <li>广告标识符（IDFA）、设备的供应商标识符（IDFV），或任何设备指纹。</li>
+        <li>位置、通讯录、照片、日历、健康数据或麦克风。</li>
+    </ul>
+
+    <h2>你自己设备之间的同步</h2>
+    <p>你的 iPhone、Apple Watch 和 Mac 会让计时保持一致。这依靠<strong>你自己的 iCloud 账户和 Apple 的 WatchConnectivity</strong> &mdash; 数据通过你的 iCloud 在设备之间流动，不经过我。<strong>我读不到其中任何内容。</strong>它包含正在运行的计时状态和名称，以及 App 连接状态里显示的设备名称。</p>
+    <p>关闭 iCloud 云盘就会停止这种同步；App 在每台设备上仍然各自正常工作。</p>
+
+    <h2>第三方与支付</h2>
+    <p>Rereminder <strong>没有集成任何第三方分析、广告或追踪服务</strong>。没有数据被出售、出租或与任何其他公司共享。</p>
+    <p>Rereminder Pro 是<strong>完全由 Apple 处理的一次性买断</strong>。我看不到你的支付信息，只知道是否存在一笔购买。</p>
+
+    <h2>通知</h2>
+    <p>所有提醒都是在你设备上排定的<strong>本地通知</strong>。没有推送服务器，通知内容也永远不会到我这里。</p>
+
+    <h2>保留多久，以及如何停止</h2>
+    <ul>
+        <li><strong>删除 App 会立即停止所有收集</strong>，并连同设备上存储的一切一起删掉那个随机 ID。</li>
+        <li>匿名使用记录在还能帮助我判断该做什么时保留，不再有用时删除。因为它们不带任何能追回到你的标识，我也没有办法在你提出要求时单独挑出"你的"那几行 &mdash; 这与它们无法用来识别你，是同一个原因。</li>
+        <li><strong>你发送的反馈不一样</strong> &mdash; 那是你写的，所以我能找到。写信给我，我会删除它。</li>
+        <li>我可以远程为所有人关闭使用统计和崩溃报告，如果哪天它不再值得，我就会关。</li>
+    </ul>
+
+    <h2>儿童隐私</h2>
+    <p>Rereminder 不会有意收集任何人的个人数据，儿童也不例外。它不需要账户，不索取个人信息，也没有社交功能、聊天或用户之间的内容。</p>
+
+    <h2>本政策的变更</h2>
+    <p>如果 App 收集的内容发生变化，这一页会随之改变，顶部的日期也会更新。重要变更同样会写进做出该变更的那个版本的更新说明里。</p>
+
+    <h2>联系</h2>
+    <p>关于以上任何一点的疑问 &mdash; 包括"你为什么需要那个？" &mdash; 请寄到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。也可以参考<a href="support.html">支持页面</a>。</p>
+</div>
+
+<!-- ============================= 繁體中文 ============================= -->
+<div data-lang="zh-Hant">
+    <h1>隱私權政策</h1>
+    <p class="lede">Rereminder 由 Hyunho Lee 開發。這一頁會明確說明什麼會離開你的手機，什麼不會。</p>
+    <p class="updated">最後更新：2026 年 9 月 9 日 &middot; 適用於 App 版本 2.2.6</p>
+
+    <h2>一句話版本</h2>
+    <div class="note">
+        <p><strong>你寫下的一切都留在你的手機上。</strong>計時器名稱、提醒文案、分段標題、演講講稿、歷史記錄 &mdash; 沒有任何一項會被送到別處。</p>
+        <p><strong>App 確實會向我傳送匿名數字。</strong>像「啟動了多少次計時」「有多少跑到了最後」這樣的次數，綁在一個與你無關的隨機 ID 上。我靠這些決定該修什麼。下面有完整說明。</p>
+        <p><strong>沒有廣告、沒有追蹤器、沒有第三方分析 SDK。</strong>不出售，也不與任何人分享。</p>
+    </div>
+
+    <h2>只留在你裝置上的內容</h2>
+    <p>以下內容存在本機，<strong>絕不會傳給我</strong>：</p>
+    <ul>
+        <li><strong>計時器設定</strong> &mdash; 時間長度、每個提醒放在哪裡、自訂提醒文案。</li>
+        <li><strong>範本</strong> &mdash; 儲存的設定和它們的名稱。</li>
+        <li><strong>分段內容</strong> &mdash; 分段名稱，以及你為每一段寫的講稿或備註。</li>
+        <li><strong>歷史記錄</strong> &mdash; 你跑過的每一場的記錄。</li>
+        <li><strong>偏好設定</strong> &mdash; 主題色、聲音與震動模式、你告訴 App 自己有哪些裝置。</li>
+        <li><strong>購買狀態</strong> &mdash; 是否擁有 Rereminder Pro，存放在 iOS 鑰匙圈中。</li>
+    </ul>
+    <p>刪除 App 就會一併刪除。</p>
+
+    <h2>App 會傳送給我的內容</h2>
+    <p>全部進入<strong>我自己的一個 CloudKit 資料庫</strong>（容器 <code>iCloud.com.Ysoup.FeedbackHub</code>）。沒有別的伺服器，也沒有任何其他公司收到其中任何內容。</p>
+
+    <h3>1. 匿名使用次數</h3>
+    <p>每次安裝一筆記錄，每天最多更新兩次。它包含：</p>
+    <ul>
+        <li>一個 <strong>App 首次啟動時自己產生的隨機 ID</strong>。它不是你的 Apple 帳號，不是裝置識別碼，也不與你的任何資訊關聯。刪除 App，這個 ID 就沒了；重新安裝會產生一個全新且互不相連的 ID。</li>
+        <li>App 版本、平台（iPhone / Watch / Mac）、系統版本和語言設定。</li>
+        <li><strong>只有次數，別無其他</strong> &mdash; 啟動、完成、取消的計時數；累計管理的分鐘數；一次計時通常有幾個提醒；儲存和使用了多少範本；是否用過分段模式；是否用過手錶；安裝後經過的天數；最後一次活躍的時間。</li>
+        <li>兩個是/否標記：是否購買了 Pro，以及是否授予了通知權限。</li>
+    </ul>
+
+    <h3>2. 匿名事件</h3>
+    <p>當發生值得記錄的事情時 &mdash; App 被開啟、計時被啟動、付費頁被顯示 &mdash; App 會記下<strong>那個事件的名稱</strong>，連同 App 版本、平台、同一個隨機 ID 和一個時間戳記。每個事件名<strong>最多每六小時記錄一次</strong>，所以這些只能說明某件事<em>是否</em>發生，永遠不能說明發生得多頻繁。</p>
+
+    <h3>3. 你主動傳送的意見</h3>
+    <p>只有當你打開 <span class="ui">傳送意見</span> 並按下傳送時才會發生。那筆記錄包含：</p>
+    <ul>
+        <li><strong>你寫的內容</strong>和你選擇的分類。</li>
+        <li><strong>一個稱呼和一個回信信箱 &mdash; 兩者都是選填的，預設都是空的。</strong>只有想收到回覆時才填。它們只用於回覆你，不作他用。</li>
+        <li><strong>一行裝置資訊</strong> &mdash; App 版本、裝置種類、系統版本，形如 <code>App 2.2.6 | iPhone | iOS 26.1</code>。那是裝置的<em>種類</em>，不是<em>哪一台</em>；裡面沒有任何能指向你的值。傳送前，表單會把這一行原樣顯示給你。</li>
+        <li>你的語言設定（例如 <code>zh_TW</code>）和平台。</li>
+    </ul>
+    <p>不按傳送，就沒有任何東西離開那個頁面。在「用得還順手嗎」提示上點 👍 會打開 App Store 評分頁，不會傳給我任何東西；點 👎 只是打開同一個意見表單。</p>
+
+    <h3>4. 當機與停頓報告</h3>
+    <p>透過 <strong>Apple 的 MetricKit</strong> 收集，它在系統層面彙總當機與效能資料。這些內容包含呼叫堆疊和耗時，絕不包含你的計時內容。</p>
+
+    <div class="note">
+        <p><strong>有一點值得說明：</strong>當你的裝置把上述任何內容寫入 CloudKit 時，Apple 會給記錄蓋上一個不透明的、按 App 區分的 iCloud 識別碼。它由 Apple 產生，每個 App 都不同，不是你的信箱地址，我也無法用它聯絡你或在別處查到你。這是 CloudKit 運作方式帶來的副作用，不是 App 有意收集的東西。</p>
+    </div>
+
+    <h2>在任何情況下都不會傳送的內容</h2>
+    <ul>
+        <li>計時器名稱、提醒文案、分段標題、演講講稿 &mdash; <strong>你輸入的任何文字。</strong></li>
+        <li>你的姓名或信箱地址 &mdash; 除了上面意見表單中那兩個選填欄位，那是你自己填的，也可以留空。</li>
+        <li>廣告識別碼（IDFA）、裝置的供應商識別碼（IDFV），或任何裝置指紋。</li>
+        <li>位置、聯絡資訊、照片、行事曆、健康資料或麥克風。</li>
+    </ul>
+
+    <h2>你自己裝置之間的同步</h2>
+    <p>你的 iPhone、Apple Watch 和 Mac 會讓計時保持一致。這依靠<strong>你自己的 iCloud 帳號和 Apple 的 WatchConnectivity</strong> &mdash; 資料透過你的 iCloud 在裝置之間流動，不經過我。<strong>我讀不到其中任何內容。</strong>它包含正在執行的計時狀態和名稱，以及 App 連線狀態裡顯示的裝置名稱。</p>
+    <p>關閉 iCloud 雲碟就會停止這種同步；App 在每台裝置上仍然各自正常運作。</p>
+
+    <h2>第三方與付款</h2>
+    <p>Rereminder <strong>沒有整合任何第三方分析、廣告或追蹤服務</strong>。沒有資料被出售、出租或與任何其他公司分享。</p>
+    <p>Rereminder Pro 是<strong>完全由 Apple 處理的一次買斷</strong>。我看不到你的付款資訊，只知道是否存在一筆購買。</p>
+
+    <h2>通知</h2>
+    <p>所有提醒都是在你裝置上排定的<strong>本地通知</strong>。沒有推播伺服器，通知內容也永遠不會到我這裡。</p>
+
+    <h2>保留多久，以及如何停止</h2>
+    <ul>
+        <li><strong>刪除 App 會立即停止所有收集</strong>，並連同裝置上儲存的一切一起刪掉那個隨機 ID。</li>
+        <li>匿名使用記錄在還能幫助我判斷該做什麼時保留，不再有用時刪除。因為它們不帶任何能追回到你的識別資訊，我也沒有辦法在你提出要求時單獨挑出「你的」那幾筆 &mdash; 這與它們無法用來識別你，是同一個原因。</li>
+        <li><strong>你傳送的意見不一樣</strong> &mdash; 那是你寫的，所以我找得到。寫信給我，我會刪除它。</li>
+        <li>我可以遠端為所有人關閉使用統計和當機報告，如果哪天它不再值得，我就會關。</li>
+    </ul>
+
+    <h2>兒童隱私</h2>
+    <p>Rereminder 不會有意收集任何人的個人資料，兒童也不例外。它不需要帳號，不索取個人資訊，也沒有社群功能、聊天或使用者之間的內容。</p>
+
+    <h2>本政策的變更</h2>
+    <p>如果 App 收集的內容有變化，這一頁會隨之改變，頂部的日期也會更新。重要變更同樣會寫進做出該變更的那個版本的更新說明裡。</p>
+
+    <h2>聯絡</h2>
+    <p>關於以上任何一點的疑問 &mdash; 包括「你為什麼需要那個？」 &mdash; 請寄到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。也可以參考<a href="support.html">支援頁面</a>。</p>
+</div>
+
 </div>
 
 <footer>
@@ -367,8 +560,9 @@
 <script>
 (function () {
     var KEY = 'rereminder-lang';
+    var LANGS = ['en', 'ko', 'zh-Hans', 'zh-Hant'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-zh-Hans', 'lang-zh-Hant');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
         var buttons = document.querySelectorAll('[data-set-lang]');
@@ -383,13 +577,18 @@
         var saved = null;
         // 'lang' 은 index.html 이 예전에 쓰던 키다 — 이미 고른 사람의 선택을 잇는다.
         try { saved = localStorage.getItem(KEY) || localStorage.getItem('lang'); } catch (e) {}
-        if (saved === 'ko' || saved === 'en') return saved;
+        if (LANGS.indexOf(saved) >= 0) return saved;
         // navigator.language 하나만 보면 "영어를 1순위로 두고 한국어도 쓰는" 기기를 놓친다.
         var tags = (navigator.languages && navigator.languages.length)
             ? navigator.languages
             : [navigator.language || navigator.userLanguage || ''];
         for (var i = 0; i < tags.length; i++) {
-            if (String(tags[i]).toLowerCase().indexOf('ko') === 0) return 'ko';
+            var tag = String(tags[i]).toLowerCase();
+            if (tag.indexOf('ko') === 0) return 'ko';
+            // 번체는 대만·홍콩·마카오. 그 밖의 zh 는 간체로 본다(zh 만 온 경우 포함).
+            if (tag.indexOf('zh') === 0) {
+                return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
+            }
         }
         return 'en';
     }
